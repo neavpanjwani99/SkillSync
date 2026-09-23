@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Data;
+using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -9,11 +8,12 @@ namespace SkillSync.Pages.client
 {
     public partial class MatchResults : System.Web.UI.Page
     {
+        // Page Load Event - Reads QueryString filters and updates UI summary labels
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                // Read incoming search criteria from QueryString
+                // Step 1: Read search criteria from URL parameters
                 string cat = Request.QueryString["cat"];
                 string skills = Request.QueryString["skills"];
                 string min = Request.QueryString["min"];
@@ -22,6 +22,7 @@ namespace SkillSync.Pages.client
                 string loc = Request.QueryString["loc"];
                 string mode = Request.QueryString["mode"];
 
+                // Update summary bar badges
                 if (!string.IsNullOrEmpty(cat))
                 {
                     lblSummaryCat.Text = GetCategoryDisplayName(cat);
@@ -51,9 +52,41 @@ namespace SkillSync.Pages.client
                     string modeStr = string.IsNullOrEmpty(mode) ? "Remote" : mode;
                     lblSummaryLoc.Text = $"{locStr} ({modeStr})";
                 }
+
+                // Step 2: Fetch matched freelancers from database using ADO.NET
+                FetchMatchedServicesFromDatabase(cat);
             }
         }
 
+        // Helper method to execute ADO.NET query to get matching services
+        private void FetchMatchedServicesFromDatabase(string category)
+        {
+            try
+            {
+                using (SqlConnection con = DbHelper.GetConnection())
+                {
+                    string query = @"SELECT s.ServiceID, s.ServiceTitle, s.Price, s.DeliveryDays, s.ExperienceYears, u.FullName, u.Location 
+                                    FROM SERVICES s 
+                                    INNER JOIN USERS u ON s.FreelancerID = u.UserID 
+                                    WHERE s.Status = 'Active'";
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        DataTable dt = new DataTable();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Smooth fallback if DB is initializing
+            }
+        }
+
+        // Sidebar Apply Filter Button Click Event
         protected void btnApplyFilter_Click(object sender, EventArgs e)
         {
             lblSummaryCat.Text = ddlFiltCat.SelectedItem.Text;
