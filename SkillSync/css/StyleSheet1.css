@@ -1,6 +1,29 @@
-﻿/* =========================
-   SKILLSYNC COMMON CSS
-   ========================= */
+/* =========================================================
+   SKILLSYNC — GLOBAL DESIGN SYSTEM & COMMON STYLES
+   Inspired by CollegeHunt UI/UX (Clean, Premium, Modern)
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+
+:root {
+    --primary-dark: #2B1A12;
+    --primary-brown: #4A2C1D;
+    --primary-chocolate: #5A321F;
+    --accent-gold: #C99A5B;
+    --bg-cream-light: #FFFAF3;
+    --bg-ivory: #FAF7F2;
+    --bg-cream: #F3E2CF;
+    --border-cream: #E5D6C5;
+    --text-heading: #231610;
+    --text-body: #4A3B32;
+    --text-muted: #7A685D;
+    --card-shadow: 0 6px 24px rgba(43, 26, 18, 0.06);
+    --card-shadow-hover: 0 12px 32px rgba(43, 26, 18, 0.12);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-pill: 999px;
+}
 
 * {
     margin: 0;
@@ -8,31 +31,271 @@
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-ivory);
+    color: var(--text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
-body {
-    background-color: #faf7f2;
-    color: #2f2119;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    color: var(--text-heading);
+    font-weight: 700;
 }
 
 a {
     text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease-in-out;
 }
 
-.main-header {
-    width: 100%;
+/* =========================================================
+   COMMON CONTAINER & LAYOUT
+   ========================================================= */
+
+.container {
+    width: 92%;
+    max-width: 1300px;
+    margin: 0 auto;
 }
 
 .main-content {
     width: 100%;
-    min-height: 650px;
+    min-height: calc(100vh - 380px);
 }
 
-.main-footer {
+/* =========================================================
+   HEADER NAVIGATION (CLIENT)
+   ========================================================= */
+
+.main-header {
     width: 100%;
+    background-color: var(--bg-cream-light);
+    border-bottom: 1px solid var(--border-cream);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 18px rgba(43, 26, 18, 0.05);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 84px;
+    gap: 24px;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.brand-logo img {
+    height: 44px;
+    width: auto;
+    display: block;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-link {
+    color: var(--primary-brown);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-chocolate);
+    background-color: rgba(90, 50, 31, 0.06);
+}
+
+.btn-primary {
+    background-color: var(--primary-chocolate);
+    color: var(--bg-cream-light) !important;
+    padding: 11px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(90, 50, 31, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(90, 50, 31, 0.35);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary-brown) !important;
+    border: 1px solid var(--primary-brown);
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-brown);
+    color: var(--bg-cream-light) !important;
+}
+
+/* =========================================================
+   COMMON UI CARDS & BADGES (CollegeHunt style)
+   ========================================================= */
+
+.card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-cream);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--accent-gold);
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-gold {
+    background-color: rgba(201, 154, 91, 0.15);
+    color: #8C6225;
+    border: 1px solid rgba(201, 154, 91, 0.3);
+}
+
+.badge-brown {
+    background-color: rgba(74, 44, 29, 0.1);
+    color: var(--primary-brown);
+}
+
+.badge-match {
+    background-color: #E6F4EA;
+    color: #137333;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* =========================================================
+   FOOTER (CLIENT)
+   ========================================================= */
+
+.main-footer {
+    background-color: var(--primary-dark);
+    color: var(--bg-cream-light);
+    margin-top: 80px;
+    padding: 60px 0 30px;
+    border-top: 4px solid var(--accent-gold);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-brand h3 {
+    color: var(--bg-cream);
+    font-size: 26px;
+    margin-bottom: 12px;
+}
+
+.footer-brand p {
+    color: #CDB9A8;
+    font-size: 14px;
+    max-width: 320px;
+}
+
+.footer-column h4 {
+    color: var(--bg-cream);
+    font-size: 16px;
+    margin-bottom: 18px;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #D9C6B5;
+    font-size: 14px;
+}
+
+.footer-links a:hover {
+    color: var(--accent-gold);
+    padding-left: 4px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #4B3529;
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #A9907E;
+    font-size: 13px;
+}
+
+/* =========================================================
+   RESPONSIVE UTILITIES
+   ========================================================= */
+
+@media (max-width: 992px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+    .nav-links {
+        gap: 12px;
+    }
+    .nav-link {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
 }
