@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +12,13 @@ namespace SkillSync.Pages.client
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+
+        protected void btnFind_Click(object sender, EventArgs e)
+        {
+            string category = ddlCategory.SelectedValue;
+            string req = txtRequirement.Text.Trim();
+            Response.Redirect($"MatchResults.aspx?cat={Server.UrlEncode(category)}&skills={Server.UrlEncode(req)}");
         }
     }
 }

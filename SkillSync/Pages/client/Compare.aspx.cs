@@ -13,5 +13,12 @@ namespace SkillSync.Pages.client
         {
 
         }
+
+        protected void btnCompare_Click(object sender, EventArgs e)
+        {
+            // Update matrix selections on postback
+            string val1 = ddlCandidate1.SelectedValue;
+            string val2 = ddlCandidate2.SelectedValue;
+        }
     }
 }
