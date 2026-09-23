@@ -12,3 +12,4 @@
 // Commit Step 12 - feat(users): implement edit user popup modal with status selection
 // Commit Step 13 - feat(users): add new freelancer creation modal form for admin
 // Commit Step 14 - fix(users): implement dynamic UserID auto increment for user insertion
+// Commit Step 15 - fix(users): add foreign key cascade deletion for USERS table
