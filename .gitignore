@@ -24,6 +24,8 @@ x86/
 [Bb]uild/
 PAGE_CONTROLS_DOCUMENTATION.md
 BACKEND_DATABASE_PLAN.md
+FRONTEND_DOCUMENTATION.md
+BACKEND_DOCUMENTATION.md
 Advance Web Programming.pdf
 table_ss
 mock_data.sql
