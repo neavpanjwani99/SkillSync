@@ -73,6 +73,7 @@
     <Content Include="Pages\client\FindFreelancer.aspx" />
     <Content Include="Pages\client\MatchResults.aspx" />
     <Content Include="Pages\client\Compare.aspx" />
+    <Content Include="Pages\client\Login.aspx" />
     <Content Include="Pages\admin\AdminDashboard.aspx" />
     <Content Include="Pages\admin\ManageUsers.aspx" />
     <Content Include="Pages\admin\ManageServices.aspx" />
@@ -107,6 +108,13 @@
     </Compile>
     <Compile Include="Pages\client\Compare.aspx.designer.cs">
       <DependentUpon>Compare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\client\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\client\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\admin\admin-side.Master.cs">
       <DependentUpon>admin-side.Master</DependentUpon>
