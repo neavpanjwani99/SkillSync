@@ -1,6 +1,6 @@
-# SkillSync ~ Freelancer Service Marketplace Platform
+# SkillSync ~ Requirement-Based Freelancer Marketplace Platform
 
-**SkillSync** is a college prototype web application built with **ASP.NET Web Forms (.NET Framework 4.7.2)** and **C#**. It provides a requirement-based freelancer marketplace that connects clients with skilled professionals through intelligent match percentage scoring, side-by-side candidate comparison, and comprehensive administrative oversight.
+**SkillSync** is an ASP.NET Web Forms web application built with **.NET Framework 4.7.2**, **C#**, and **SQL Server (ADO.NET Practical 12 Architecture)**. It provides an end-to-end requirement-based marketplace connecting clients with skilled freelance professionals through intelligent match scoring, candidate selection by identification, side-by-side comparison, and administrative oversight.
 
 ---
 
@@ -10,26 +10,39 @@
 | :--- | :--- |
 | **Framework** | ASP.NET Web Forms (.NET Framework 4.7.2) |
 | **Backend Language** | C# (`.aspx.cs` code-behind) |
-| **Frontend Markup** | HTML5, ASP.NET Web Forms Controls |
-| **Styling** | Custom Vanilla CSS (`StyleSheet1.css` based on CollegeHunt color palette `#2B1A12`, `#5A321F`, `#FFFAF3`, `#FAF7F2`, `#C99A5B`) |
+| **Database Engine** | Microsoft SQL Server (`SkillSync` Database) |
+| **Database Access** | Standard ADO.NET (`SqlConnection`, `SqlCommand`, `SqlDataReader`, `SqlDataAdapter`, `DataTable`) |
+| **Frontend Markup** | HTML5, ASP.NET Server Controls (`<asp:Repeater>`, `<asp:DropDownList>`, `<asp:TextBox>`, `<asp:Button>`, `<asp:Panel>`) |
+| **Styling** | Custom Vanilla CSS (`StyleSheet1.css` palette `#2B1A12`, `#5A321F`, `#FFFAF3`, `#FAF7F2`, `#C99A5B`) |
 | **Tooling & IDE** | Visual Studio 2022 / MSBuild |
 
 ---
 
-## Core Application Modules
+## Key Platform Features
 
 ### 1. Client Portal
-- **Home Landing Page (`Home.aspx`)**: Features hero requirement search, popular service categories grid, 3-step smart matching overview, and featured freelancer cards.
-- **Find Freelancers (`FindFreelancer.aspx`)**: Comprehensive multi-criteria requirement input form capturing category, skills, budget range, delivery time, experience level, location, work mode, and priority filters.
-- **Smart Match Engine (`MatchResults.aspx`)**: Displays ranked freelancer candidates with calculated **Match Percentages** (e.g. 94% Match, 87% Match), match justification checklists, skill overlap badges, and interactive profile modals.
-- **Side-by-Side Candidate Comparison (`Compare.aspx`)**: Interactive side-by-side comparison matrix evaluating candidates across hourly rates, ratings, completed projects, delivery estimates, location, work mode, and skills.
-- **User Authentication (`Login.aspx`)**: Role-based access portal supporting Client, Freelancer, and Administrator roles with automatic post-login redirection.
+- **Home Landing Page (`Home.aspx`)**: Features category dropdown loaded dynamically from database `CATEGORIES` table, hero requirement search, and 3-step platform overview.
+- **Find Freelancers (`FindFreelancer.aspx`)**: Structured requirement posting form capturing project budget, category, skills, delivery time (in integer days), experience, location, and work mode. Submits record to `PROJECT_REQUIREMENTS` database table.
+- **Smart Match Engine & Selection (`MatchResults.aspx`)**: 
+  - Displays dynamic freelancer listings fetched from database (`USERS` joined with `SERVICES` and `CATEGORIES`).
+  - **Select Freelancer by Identification**: Dropdown filter allowing clients to search and select freelancers by unique ID (`ID: FL-005`) or registered email (`aarav@gmail.com`).
+  - **Select & Hire Action**: Direct "Select & Hire" button inserting order transactions into database `ORDERS` table.
+- **Side-by-Side Candidate Comparison (`Compare.aspx`)**: Dual dropdown candidate selection filled from database `USERS` for side-by-side evaluation.
+- **User Authentication (`Login.aspx`)**: Handles role-based login (Client, Freelancer, Admin) and client user registration with dynamic `UserID` auto-increment.
 
 ### 2. Admin Portal
-- **Admin Dashboard Overview (`AdminDashboard.aspx`)**: Key Performance Indicators (KPI metric cards), real-time activity timeline, and system overview.
-- **User Management (`ManageUsers.aspx`)**: Administrator module for searching, filtering, adding, editing, and managing Client and Freelancer accounts.
-- **Service Catalog Management (`ManageServices.aspx`)**: Catalog management interface for reviewing, editing, pricing, and moderating listed freelancer services.
-- **Order Transaction Management (`ManageOrders.aspx`)**: Central order tracking dashboard monitoring order statuses, dates, amounts, and client transactions.
+- **Admin Dashboard (`AdminDashboard.aspx`)**: Dynamic KPI metric cards calculating `COUNT(*)` stats for Users, Freelancers, Services, and Orders, category breakdown, and recent activity log.
+- **User Management (`ManageUsers.aspx`)**: Admin module for reviewing users, editing user details (Email, Location, Status, Name), adding new Freelancers, and performing foreign key cascade deletions.
+- **Service Catalog Management (`ManageServices.aspx`)**: Catalog management interface for creating, editing, and deleting listed freelancer services.
+- **Order Transaction Management (`ManageOrders.aspx`)**: Central order tracking dashboard monitoring client-freelancer transactions, totals, and statuses.
+
+---
+
+## Database Architecture & Connection
+
+- **Connection String**: `Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True`
+- **Tables**: `USERS`, `CATEGORIES`, `SERVICES`, `FREELANCER_SKILLS`, `PROJECT_REQUIREMENTS`, `ORDERS`.
+- **Dynamic Primary Key Auto-Increment**: SQL subquery pattern `(select isnull(max(ID), 0) + 1 from TABLE)` used for primary key generation across all tables.
 
 ---
 
@@ -39,8 +52,7 @@
 SkillSync/
 ├── SkillSync.sln                           # Visual Studio Solution File
 ├── .gitignore                              # Git ignore configuration
-├── PAGE_CONTROLS_DOCUMENTATION.md          # Comprehensive ASP.NET Controls Matrix
-├── README.md                               # Project Documentation
+├── README.md                               # Main Project Documentation
 └── SkillSync/                              # ASP.NET Web Application Root
     ├── Web.config                          # ASP.NET Application Configuration
     ├── packages.config                     # NuGet Package Dependencies
@@ -48,21 +60,21 @@ SkillSync/
     │   └── StyleSheet1.css                 # Global Custom Design System
     ├── images/
     │   ├── main-logo.png                   # SkillSync Brand Logo
-    │   ├── freelancer1.jpg                 # Candidate Avatar 1 (Aarav Mehta)
-    │   ├── freelancer2.jpg                 # Candidate Avatar 2 (Riya Shah)
-    │   ├── freelancer3.jpg                 # Candidate Avatar 3 (Vikram Malhotra)
-    │   └── freelancer4.jpg                 # Candidate Avatar 4 (Ananya Verma)
+    │   ├── freelancer1.jpg                 # Candidate Avatar 1
+    │   ├── freelancer2.jpg                 # Candidate Avatar 2
+    │   ├── freelancer3.jpg                 # Candidate Avatar 3
+    │   └── freelancer4.jpg                 # Candidate Avatar 4
     └── Pages/
         ├── client/                         # Client Portal Pages
-        │   ├── client-side.Master          # Client Master Page Layout & CollegeHunt Footer
+        │   ├── client-side.Master          # Client Master Page Layout
         │   ├── Home.aspx                   # Home Landing Page
-        │   ├── FindFreelancer.aspx         # Requirement Search & Input Form
-        │   ├── MatchResults.aspx           # Match Percentage & Candidate Results
-        │   ├── Compare.aspx                # Side-by-Side Comparison Matrix
-        │   └── Login.aspx                  # Role-Based Authentication Portal
+        │   ├── FindFreelancer.aspx         # Requirement Search Form
+        │   ├── MatchResults.aspx           # Match Results & Freelancer Selection
+        │   ├── Compare.aspx                # Candidate Comparison Matrix
+        │   └── Login.aspx                  # User Authentication Portal
         └── admin/                          # Admin Portal Pages
-            ├── admin-side.Master           # Admin Master Page Sidebar & Header Layout
-            ├── AdminDashboard.aspx         # Admin KPI Dashboard & Timeline
+            ├── admin-side.Master           # Admin Master Page Sidebar Layout
+            ├── AdminDashboard.aspx         # Admin KPI Dashboard
             ├── ManageUsers.aspx            # User Management Table
             ├── ManageServices.aspx         # Service Catalog Table
             └── ManageOrders.aspx           # Order Management Table
@@ -70,26 +82,24 @@ SkillSync/
 
 ---
 
-## Visual Studio Web Forms Designer Compatibility
+## Visual Studio & Designer Compatibility
 
-All `.aspx` pages have been specifically formatted for 100% error-free operation in Visual Studio Web Forms Designer:
-1. **Relative Master Page File Referencing**: All content pages utilize relative path declarations (`MasterPageFile="client-side.Master"` and `MasterPageFile="admin-side.Master"`).
-2. **Zero Outer Whitespace**: All content files contain 0 whitespace or blank line characters before/after `<asp:Content>` tags to prevent Visual Studio's *"The page contains markup that is not valid when attached to a Master Page"* error.
-3. **Vanilla CSS & Standard Controls**: High-performance, clean UI built with standard Web Forms controls without external JS framework wrappers.
+1. **Error-Free Web Forms Markup**: All content pages use clean `<asp:Content>` tags without outer whitespace to guarantee Visual Studio Web Forms Designer compatibility.
+2. **Standard ADO.NET Code-Behind**: Beginner-friendly C# code-behind logic without complex external ORM dependencies.
 
 ---
 
 ## Installation & Setup
 
-1. **Clone the Repository**:
+1. **Clone Repository**:
    ```bash
    git clone https://github.com/neavpanjwani99/SkillSync.git
    ```
-2. **Open Solution**: Launch `SkillSync.sln` in **Visual Studio 2022**.
-3. **Restore Packages & Build**:
-   - Right-click Solution in Solution Explorer -> **Restore NuGet Packages**.
+2. **Database Setup**: Execute database script in **SQL Server Management Studio (SSMS)** under database name `SkillSync`.
+3. **Open & Build**:
+   - Launch `SkillSync.sln` in **Visual Studio 2022**.
    - Build Solution (`Ctrl + Shift + B`).
-4. **Run Application**: Set `Pages/client/Home.aspx` as Start Page and press `F5` or `Ctrl + F5`.
+4. **Run Application**: Set `Pages/client/Home.aspx` as Start Page and press `F5` / `Ctrl + F5`.
 
 ---
 
