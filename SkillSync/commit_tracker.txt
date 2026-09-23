@@ -1,1 +1,2 @@
 // Commit Step 1 - feat(auth): initial client login form structure and routing
+// Commit Step 2 - style(login): refine login page CSS layout and form alignment
