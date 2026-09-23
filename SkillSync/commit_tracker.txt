@@ -2,3 +2,4 @@
 // Commit Step 2 - style(login): refine login page CSS layout and form alignment
 // Commit Step 3 - feat(auth): implement client user registration form logic
 // Commit Step 4 - refactor(auth): simplify login authentication using ADO.NET SqlCommand
+// Commit Step 5 - fix(auth): handle empty email and password input validation
