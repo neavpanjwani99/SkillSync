@@ -15,3 +15,4 @@
 // Commit Step 15 - fix(users): add foreign key cascade deletion for USERS table
 // Commit Step 16 - feat(services): setup manage services page repeater and UI
 // Commit Step 17 - feat(services): bind SERVICES table joining USERS and CATEGORIES
+// Commit Step 18 - feat(services): add edit service popup modal for price and delivery days
