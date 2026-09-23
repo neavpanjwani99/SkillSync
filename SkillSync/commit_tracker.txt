@@ -21,3 +21,4 @@
 // Commit Step 21 - feat(orders): setup manage orders repeater for admin portal
 // Commit Step 22 - feat(orders): bind ORDERS table joining clients, freelancers, and services
 // Commit Step 23 - feat(client): implement find freelancer project requirement form
+// Commit Step 24 - fix(client): update delivery time dropdown values to numeric days
