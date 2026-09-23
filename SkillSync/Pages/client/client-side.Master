@@ -1,0 +1,242 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="client-side.Master.cs" Inherits="SkillSync.Site1" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>SkillSync | Skills Meet Opportunities</title>
+
+    <link href="~/css/StyleSheet.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="main-header"
+        style="background:#fffaf3;
+               border-bottom:1px solid #e5d6c5;
+               box-shadow:0 3px 15px rgba(70,42,25,0.08);">
+
+        <div style="width:92%;
+                    max-width:1350px;
+                    margin:auto;
+                    min-height:88px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:30px;">
+
+            <!-- LOGO -->
+
+            <div style="display:flex;
+                        align-items:center;
+                        flex-shrink:0;">
+
+                <asp:HyperLink
+                    ID="LogoLink"
+                    runat="server"
+                    NavigateUrl="~/Pages/client/Home.aspx">
+
+                    <asp:Image
+                        ID="MainLogo"
+                        runat="server"
+                        ImageUrl="~/images/main-logo.png"
+                        AlternateText="SkillSync"
+                        style="width:175px;
+                               height:auto;
+                               display:block;" />
+
+                </asp:HyperLink>
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <nav style="display:flex;
+                        align-items:center;
+                        justify-content:flex-end;
+                        gap:32px;
+                        flex:1;">
+
+                <asp:HyperLink
+                    ID="HomeLink"
+                    runat="server"
+                    NavigateUrl="~/Pages/client/Home.aspx"
+                    style="color:#4a2c1d;
+                           font-size:15px;
+                           font-weight:600;
+                           transition:0.3s;">
+                    Home
+                </asp:HyperLink>
+
+
+                <asp:HyperLink
+                    ID="FindLink"
+                    runat="server"
+                    NavigateUrl="~/Pages/client/FindFreelancer.aspx"
+                    style="color:#4a2c1d;
+                           font-size:15px;
+                           font-weight:600;
+                           transition:0.3s;">
+                    Find Freelancer
+                </asp:HyperLink>
+
+
+                <a href="#"
+                   style="color:#4a2c1d;
+                          font-size:15px;
+                          font-weight:600;">
+                    Compare
+                </a>
+
+
+                <a href="#"
+                   style="color:#4a2c1d;
+                          font-size:15px;
+                          font-weight:600;">
+                    About
+                </a>
+
+
+                <asp:HyperLink
+                    ID="LoginLink"
+                    runat="server"
+                    NavigateUrl="#"
+                    style="background:#5a321f;
+                           color:#fffaf3;
+                           padding:11px 23px;
+                           border-radius:8px;
+                           font-size:14px;
+                           font-weight:600;
+                           box-shadow:0 5px 12px rgba(90,50,31,0.20);">
+                    Login
+                </asp:HyperLink>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+        <asp:ContentPlaceHolder
+            ID="ContentPlaceHolder1"
+            runat="server">
+
+        </asp:ContentPlaceHolder>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="main-footer"
+        style="background:#2b1a12;
+               color:#fffaf3;
+               margin-top:50px;">
+
+        <div style="width:92%;
+                    max-width:1350px;
+                    margin:auto;
+                    padding:45px 0 22px;">
+
+            <div style="display:flex;
+                        justify-content:space-between;
+                        align-items:flex-start;
+                        gap:40px;
+                        flex-wrap:wrap;">
+
+                <!-- BRAND -->
+
+                <div>
+
+                    <h3 style="margin:0 0 8px;
+                               color:#f3e2cf;
+                               font-size:25px;">
+                        SkillSync
+                    </h3>
+
+                    <p style="margin:0;
+                               color:#cdb9a8;
+                               font-size:14px;">
+                        Skills Meet Opportunities
+                    </p>
+
+                </div>
+
+
+                <!-- FOOTER LINKS -->
+
+                <div style="display:flex;
+                            gap:25px;
+                            flex-wrap:wrap;">
+
+                    <a href="#"
+                       style="color:#d9c6b5;
+                              font-size:14px;">
+                        Home
+                    </a>
+
+                    <a href="#"
+                       style="color:#d9c6b5;
+                              font-size:14px;">
+                        Find Freelancer
+                    </a>
+
+                    <a href="#"
+                       style="color:#d9c6b5;
+                              font-size:14px;">
+                        Compare
+                    </a>
+
+                    <a href="#"
+                       style="color:#d9c6b5;
+                              font-size:14px;">
+                        About
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER BOTTOM -->
+
+            <div style="margin-top:32px;
+                        padding-top:18px;
+                        border-top:1px solid #4b3529;
+                        text-align:center;">
+
+                <p style="margin:0;
+                           color:#a9907e;
+                           font-size:13px;">
+                    © 2026 SkillSync. All Rights Reserved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</form>
+
+</body>
+</html>
