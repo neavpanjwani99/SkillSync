@@ -53,41 +53,19 @@ SkillSync/
     │   ├── freelancer3.jpg                 # Candidate Avatar 3 (Vikram Malhotra)
     │   └── freelancer4.jpg                 # Candidate Avatar 4 (Ananya Verma)
     └── Pages/
-        ├── client/                         # Client Portal Sub-folder
+        ├── client/                         # Client Portal Pages
         │   ├── client-side.Master          # Client Master Page Layout & CollegeHunt Footer
-        │   ├── client-side.Master.cs
-        │   ├── client-side.Master.designer.cs
         │   ├── Home.aspx                   # Home Landing Page
-        │   ├── Home.aspx.cs
-        │   ├── Home.aspx.designer.cs
         │   ├── FindFreelancer.aspx         # Requirement Search & Input Form
-        │   ├── FindFreelancer.aspx.cs
-        │   ├── FindFreelancer.aspx.designer.cs
         │   ├── MatchResults.aspx           # Match Percentage & Candidate Results
-        │   ├── MatchResults.aspx.cs
-        │   ├── MatchResults.aspx.designer.cs
         │   ├── Compare.aspx                # Side-by-Side Comparison Matrix
-        │   ├── Compare.aspx.cs
-        │   ├── Compare.aspx.designer.cs
-        │   ├── Login.aspx                  # Role-Based Authentication Portal
-        │   ├── Login.aspx.cs
-        │   └── Login.aspx.designer.cs
-        └── admin/                          # Admin Portal Sub-folder
+        │   └── Login.aspx                  # Role-Based Authentication Portal
+        └── admin/                          # Admin Portal Pages
             ├── admin-side.Master           # Admin Master Page Sidebar & Header Layout
-            ├── admin-side.Master.cs
-            ├── admin-side.Master.designer.cs
             ├── AdminDashboard.aspx         # Admin KPI Dashboard & Timeline
-            ├── AdminDashboard.aspx.cs
-            ├── AdminDashboard.aspx.designer.cs
             ├── ManageUsers.aspx            # User Management Table
-            ├── ManageUsers.aspx.cs
-            ├── ManageUsers.aspx.designer.cs
             ├── ManageServices.aspx         # Service Catalog Table
-            ├── ManageServices.aspx.cs
-            ├── ManageServices.aspx.designer.cs
-            ├── ManageOrders.aspx           # Order Management Table
-            ├── ManageOrders.aspx.cs
-            └── ManageOrders.aspx.designer.cs
+            └── ManageOrders.aspx           # Order Management Table
 ```
 
 ---
