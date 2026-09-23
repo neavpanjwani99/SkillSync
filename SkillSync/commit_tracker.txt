@@ -6,3 +6,4 @@
 // Commit Step 6 - feat(admin): setup admin dashboard stats layout and counters
 // Commit Step 7 - feat(admin): bind total users and total freelancers counters
 // Commit Step 8 - feat(admin): bind active services and total orders count in dashboard
+// Commit Step 9 - style(admin): update dashboard metric card design and badges
