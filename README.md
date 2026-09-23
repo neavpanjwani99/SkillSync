@@ -1,4 +1,4 @@
-# SkillSync — Freelancer Service Marketplace Platform
+# SkillSync ~ Freelancer Service Marketplace Platform
 
 **SkillSync** is a college prototype web application built with **ASP.NET Web Forms (.NET Framework 4.7.2)** and **C#**. It provides a requirement-based freelancer marketplace that connects clients with skilled professionals through intelligent match percentage scoring, side-by-side candidate comparison, and comprehensive administrative oversight.
 
@@ -95,5 +95,5 @@ All `.aspx` pages have been specifically formatted for 100% error-free operation
 
 ## Development Team
 
-- **Neav Panjwani** — *Frontend Developer*
-- **Manya Nirvan** — *Backend Developer*
+- **Neav Panjwani** ~ *Frontend Developer*
+- **Manya Nirvan** ~ *Backend Developer*
