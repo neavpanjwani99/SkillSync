@@ -125,6 +125,7 @@
             
             <!-- HEADER -->
             <div class="login-header">
+                <img src="../../images/main-logo.png" alt="SkillSync Logo" style="height: 75px; width: auto; margin: 0 auto 14px; display: block;" />
                 <span class="badge badge-gold" style="margin-bottom: 10px;">Account Access</span>
                 <h1 class="login-title">Welcome to SkillSync</h1>
                 <p class="login-subtitle">Sign in to manage your projects or freelancer profile</p>

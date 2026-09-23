@@ -13,12 +13,12 @@
 
     <!-- ================= HEADER / NAVBAR ================= -->
     <header class="main-header" style="background-color: #FFFFFF; border-bottom: 1px solid #E5D6C5; position: sticky; top: 0; z-index: 1000;">
-        <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between; min-height: 84px; padding: 14px 0;">
+        <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between; min-height: 90px; padding: 12px 0;">
             
             <!-- LOGO LEFT -->
             <div class="brand-logo" style="display: inline-block; float: left;">
                 <asp:HyperLink ID="LogoLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx">
-                    <asp:Image ID="MainLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Logo" style="height: 58px; width: auto; display: block;" />
+                    <asp:Image ID="MainLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Logo" style="height: 75px; width: auto; display: block;" />
                 </asp:HyperLink>
             </div>
 
@@ -52,7 +52,7 @@
                     <td style="vertical-align: top; width: 55%; padding-right: 40px;">
                         <div style="margin-bottom: 14px;">
                             <asp:HyperLink ID="FooterLogoLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx">
-                                <asp:Image ID="FooterLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Brand Logo" style="height: 52px; width: auto; display: block;" />
+                                <asp:Image ID="FooterLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Brand Logo" style="height: 70px; width: auto; display: block;" />
                             </asp:HyperLink>
                         </div>
                         <p style="font-size: 14px; color: #6E5A4F; max-width: 440px; line-height: 1.6; margin: 0;">

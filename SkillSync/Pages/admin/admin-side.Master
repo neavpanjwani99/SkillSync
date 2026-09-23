@@ -124,7 +124,7 @@
         <!-- SIDEBAR (LEFT) -->
         <aside class="admin-sidebar">
             <div class="admin-brand">
-                <h2>SkillSync</h2>
+                <img src="../../images/main-logo.png" alt="SkillSync Logo" style="height: 65px; width: auto; display: block;" />
                 <span class="admin-badge">Admin</span>
             </div>
 
