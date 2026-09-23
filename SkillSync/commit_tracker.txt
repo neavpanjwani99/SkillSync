@@ -24,3 +24,4 @@
 // Commit Step 24 - fix(client): update delivery time dropdown values to numeric days
 // Commit Step 25 - feat(client): add dynamic requirement ID auto increment on requirement submission
 // Commit Step 26 - feat(client): bind database freelancers and services on match results page
+// Commit Step 27 - feat(client): add select freelancer by identification filter and hire action
