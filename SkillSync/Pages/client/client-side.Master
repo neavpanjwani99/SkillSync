@@ -13,12 +13,12 @@
 
     <!-- ================= HEADER / NAVBAR ================= -->
     <header class="main-header" style="background-color: #FFFFFF; border-bottom: 1px solid #E5D6C5; position: sticky; top: 0; z-index: 1000;">
-        <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between; min-height: 76px; padding: 12px 0;">
+        <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between; min-height: 84px; padding: 14px 0;">
             
             <!-- LOGO LEFT -->
             <div class="brand-logo" style="display: inline-block; float: left;">
                 <asp:HyperLink ID="LogoLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx">
-                    <asp:Image ID="MainLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Logo" style="height: 42px; width: auto; display: block;" />
+                    <asp:Image ID="MainLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Logo" style="height: 58px; width: auto; display: block;" />
                 </asp:HyperLink>
             </div>
 
@@ -28,7 +28,7 @@
                 <asp:HyperLink ID="FindLink" runat="server" NavigateUrl="~/Pages/client/FindFreelancer.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Find Freelancer</asp:HyperLink>
                 <asp:HyperLink ID="MatchLink" runat="server" NavigateUrl="~/Pages/client/MatchResults.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Match Results</asp:HyperLink>
                 <asp:HyperLink ID="CompareLink" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Compare</asp:HyperLink>
-                <asp:HyperLink ID="LoginLink" runat="server" NavigateUrl="~/Pages/client/Login.aspx" CssClass="btn-primary" style="display: inline-block; padding: 9px 22px; background-color: #5A321F; color: #FFFAF3 !important; border-radius: 8px; font-weight: 600;">Login</asp:HyperLink>
+                <asp:HyperLink ID="LoginLink" runat="server" NavigateUrl="~/Pages/client/Login.aspx" CssClass="btn-primary" style="display: inline-block; padding: 10px 24px; background-color: #5A321F; color: #FFFAF3 !important; border-radius: 8px; font-weight: 600;">Login</asp:HyperLink>
             </nav>
 
             <div style="clear: both;"></div>
@@ -52,7 +52,7 @@
                     <td style="vertical-align: top; width: 55%; padding-right: 40px;">
                         <div style="margin-bottom: 14px;">
                             <asp:HyperLink ID="FooterLogoLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx">
-                                <asp:Image ID="FooterLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Brand Logo" style="height: 38px; width: auto;" />
+                                <asp:Image ID="FooterLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Brand Logo" style="height: 52px; width: auto; display: block;" />
                             </asp:HyperLink>
                         </div>
                         <p style="font-size: 14px; color: #6E5A4F; max-width: 440px; line-height: 1.6; margin: 0;">
