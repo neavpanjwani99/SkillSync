@@ -1,0 +1,38 @@
+﻿/* =========================
+   SKILLSYNC COMMON CSS
+   ========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #faf7f2;
+    color: #2f2119;
+}
+
+a {
+    text-decoration: none;
+}
+
+.main-header {
+    width: 100%;
+}
+
+.main-content {
+    width: 100%;
+    min-height: 650px;
+}
+
+.main-footer {
+    width: 100%;
+}
