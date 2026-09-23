@@ -8,3 +8,4 @@
 // Commit Step 8 - feat(admin): bind active services and total orders count in dashboard
 // Commit Step 9 - style(admin): update dashboard metric card design and badges
 // Commit Step 10 - feat(users): add user management table layout in admin portal
+// Commit Step 11 - feat(users): bind database USERS table to admin repeater
