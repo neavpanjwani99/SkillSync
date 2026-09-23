@@ -1,142 +1,105 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="client-side.Master.cs" Inherits="SkillSync.Site1" %>
-
-<!DOCTYPE html>
-
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="client-side.Master.cs" Inherits="SkillSync.Site1" %><!DOCTYPE html>
 <html lang="en">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SkillSync | Requirement-Based Freelancer Marketplace</title>
-    
-    <!-- Global StyleSheet -->
-    <link href="~/css/StyleSheet1.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../css/StyleSheet1.css" rel="stylesheet" type="text/css" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
-
 <form id="form1" runat="server">
 
     <!-- ================= HEADER / NAVBAR ================= -->
-    <header class="main-header">
-        <div class="container nav-container">
+    <header class="main-header" style="background-color: #FFFFFF; border-bottom: 1px solid #E5D6C5; position: sticky; top: 0; z-index: 1000;">
+        <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between; min-height: 76px; padding: 12px 0;">
             
-            <!-- LOGO -->
-            <div class="brand-logo">
+            <!-- LOGO LEFT -->
+            <div class="brand-logo" style="display: inline-block; float: left;">
                 <asp:HyperLink ID="LogoLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx">
-                    <asp:Image ID="MainLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Logo" />
+                    <asp:Image ID="MainLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Logo" style="height: 42px; width: auto; display: block;" />
                 </asp:HyperLink>
             </div>
 
-            <!-- NAVIGATION LINKS -->
-            <nav class="nav-links">
-                <asp:HyperLink ID="HomeLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx" CssClass="nav-link">
-                    Home
-                </asp:HyperLink>
-
-                <asp:HyperLink ID="FindLink" runat="server" NavigateUrl="~/Pages/client/FindFreelancer.aspx" CssClass="nav-link">
-                    Find Freelancer
-                </asp:HyperLink>
-
-                <asp:HyperLink ID="MatchLink" runat="server" NavigateUrl="~/Pages/client/MatchResults.aspx" CssClass="nav-link">
-                    Match Results
-                </asp:HyperLink>
-
-                <asp:HyperLink ID="CompareLink" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="nav-link">
-                    Compare
-                </asp:HyperLink>
-
-                <asp:HyperLink ID="LoginLink" runat="server" NavigateUrl="#" CssClass="btn-primary">
-                    Login
-                </asp:HyperLink>
+            <!-- NAVIGATION LINKS RIGHT (HORIZONTAL) -->
+            <nav class="nav-links" style="display: inline-block; float: right;">
+                <asp:HyperLink ID="HomeLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Home</asp:HyperLink>
+                <asp:HyperLink ID="FindLink" runat="server" NavigateUrl="~/Pages/client/FindFreelancer.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Find Freelancer</asp:HyperLink>
+                <asp:HyperLink ID="MatchLink" runat="server" NavigateUrl="~/Pages/client/MatchResults.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Match Results</asp:HyperLink>
+                <asp:HyperLink ID="CompareLink" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Compare</asp:HyperLink>
+                <asp:HyperLink ID="LoginLink" runat="server" NavigateUrl="~/Pages/client/Login.aspx" CssClass="btn-primary" style="display: inline-block; padding: 9px 22px; background-color: #5A321F; color: #FFFAF3 !important; border-radius: 8px; font-weight: 600;">Login</asp:HyperLink>
             </nav>
 
+            <div style="clear: both;"></div>
         </div>
     </header>
 
     <!-- ================= MAIN CONTENT PLACEHOLDER ================= -->
-    <main class="main-content">
+    <main class="main-content" style="min-height: calc(100vh - 360px);">
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>
     </main>
 
-    <!-- ================= FOOTER (CollegeHunt Inspired) ================= -->
-    <footer class="main-footer">
+    <!-- ================= FOOTER (COLLEGEHUNT HORIZONTAL STYLE) ================= -->
+    <footer class="main-footer-ch" style="background-color: #FFFFFF; border-top: 1px solid #E5D6C5; padding: 50px 0 30px; margin-top: 80px; color: #4A3B32;">
         <div class="container">
-            <div class="footer-grid">
-                
-                <!-- BRAND CARD & LOGO -->
-                <div class="footer-brand">
-                    <div class="footer-brand-logo-card">
-                        <asp:HyperLink ID="FooterLogoLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx">
-                            <asp:Image ID="FooterLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Brand Logo" />
-                        </asp:HyperLink>
-                    </div>
+            
+            <!-- TOP HORIZONTAL GRID: BRAND ON LEFT, LINK COLUMNS ON RIGHT -->
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                <tr>
+                    <!-- LEFT SIDE: LOGO & TAGLINE -->
+                    <td style="vertical-align: top; width: 55%; padding-right: 40px;">
+                        <div style="margin-bottom: 14px;">
+                            <asp:HyperLink ID="FooterLogoLink" runat="server" NavigateUrl="~/Pages/client/Home.aspx">
+                                <asp:Image ID="FooterLogo" runat="server" ImageUrl="~/images/main-logo.png" AlternateText="SkillSync Brand Logo" style="height: 38px; width: auto;" />
+                            </asp:HyperLink>
+                        </div>
+                        <p style="font-size: 14px; color: #6E5A4F; max-width: 440px; line-height: 1.6; margin: 0;">
+                            The smartest way to discover, compare, and hire top freelance talent for your projects. Make decisions based on data and match scores.
+                        </p>
+                    </td>
 
-                    <div class="footer-tagline">Skills Meet Opportunities</div>
+                    <!-- RIGHT SIDE: HORIZONTAL COLUMNS (PLATFORM & LEGAL) -->
+                    <td style="vertical-align: top; width: 22.5%;">
+                        <h4 style="font-size: 13px; font-weight: 700; color: #2B1A12; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px;">PLATFORM</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; line-height: 2.1;">
+                            <li><a href="FindFreelancer.aspx" style="color: #6E5A4F;">Browse Freelancers</a></li>
+                            <li><a href="MatchResults.aspx" style="color: #6E5A4F;">Smart Match Engine</a></li>
+                            <li><a href="Compare.aspx" style="color: #6E5A4F;">Smart Compare</a></li>
+                        </ul>
+                    </td>
 
-                    <p class="footer-brand-desc">
-                        SkillSync is a requirement-based freelancer discovery &amp; comparison platform. 
-                        Enter your project requirements, view match percentages, and choose the right talent.
-                    </p>
+                    <td style="vertical-align: top; width: 22.5%;">
+                        <h4 style="font-size: 13px; font-weight: 700; color: #2B1A12; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px;">LEGAL &amp; INFO</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; line-height: 2.1;">
+                            <li><a href="#" style="color: #6E5A4F;">Privacy Policy</a></li>
+                            <li><a href="#" style="color: #6E5A4F;">Terms of Service</a></li>
+                            <li><a href="../admin/AdminDashboard.aspx" style="color: #6E5A4F;">Admin Portal</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
 
-                    <div class="footer-pills">
-                        <span class="footer-pill">🎯 Smart Matching</span>
-                        <span class="footer-pill">⚖️ Side-by-Side Compare</span>
-                        <span class="footer-pill">📍 Location &amp; Work Mode</span>
-                    </div>
-                </div>
+            <!-- HORIZONTAL DIVIDER LINE -->
+            <hr style="border: 0; border-top: 1px solid #E5D6C5; margin: 24px 0;" />
 
-                <!-- QUICK LINKS -->
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul class="footer-links">
-                        <li><a href="Home.aspx"><span>→</span> Home</a></li>
-                        <li><a href="FindFreelancer.aspx"><span>→</span> Find Freelancer</a></li>
-                        <li><a href="MatchResults.aspx"><span>→</span> Match Results</a></li>
-                        <li><a href="Compare.aspx"><span>→</span> Compare Freelancers</a></li>
-                        <li><a href="../admin/AdminDashboard.aspx"><span>→</span> Admin Portal</a></li>
-                    </ul>
-                </div>
+            <!-- BOTTOM HORIZONTAL BAR: COPYRIGHT LEFT, LINKS RIGHT -->
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #7A685D;">
+                <tr>
+                    <td style="text-align: left; vertical-align: middle;">
+                        &copy; 2026 SkillSync. All rights reserved.
+                    </td>
+                    <td style="text-align: right; vertical-align: middle;">
+                        <span style="margin-right: 20px; color: #6E5A4F;">India Edition</span>
+                        <a href="#" style="color: #6E5A4F;">Sitemap</a>
+                    </td>
+                </tr>
+            </table>
 
-                <!-- TOP CATEGORIES -->
-                <div class="footer-column">
-                    <h4>Categories</h4>
-                    <ul class="footer-links">
-                        <li><a href="FindFreelancer.aspx"><span>→</span> Web Development</a></li>
-                        <li><a href="FindFreelancer.aspx"><span>→</span> UI/UX Design</a></li>
-                        <li><a href="FindFreelancer.aspx"><span>→</span> Graphic Design</a></li>
-                        <li><a href="FindFreelancer.aspx"><span>→</span> Digital Marketing</a></li>
-                        <li><a href="FindFreelancer.aspx"><span>→</span> Content Writing</a></li>
-                    </ul>
-                </div>
-
-                <!-- PLATFORM & ABOUT -->
-                <div class="footer-column">
-                    <h4>Platform</h4>
-                    <ul class="footer-links">
-                        <li><a href="#"><span>→</span> How Matching Works</a></li>
-                        <li><a href="#"><span>→</span> Freelancer Verification</a></li>
-                        <li><a href="#"><span>→</span> Terms of Service</a></li>
-                        <li><a href="#"><span>→</span> Privacy Policy</a></li>
-                        <li><a href="#"><span>→</span> Support &amp; FAQ</a></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <!-- FOOTER BOTTOM -->
-            <div class="footer-bottom">
-                <p>© 2026 SkillSync Freelancer Marketplace. All Rights Reserved.</p>
-                <div class="footer-bottom-badge">
-                    College Project Prototype | ASP.NET Web Forms
-                </div>
-            </div>
         </div>
     </footer>
 
 </form>
-
 </body>
 </html>

@@ -1,15 +1,10 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="admin-side.Master.cs" Inherits="SkillSync.Pages.admin.admin_side" %>
-
-<!DOCTYPE html>
-
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="admin-side.Master.cs" Inherits="SkillSync.Pages.admin.admin_side" %><!DOCTYPE html>
 <html lang="en">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SkillSync | Admin Panel</title>
-
     <link href="../../css/StyleSheet1.css" rel="stylesheet" type="text/css" />
-
     <style type="text/css">
         .admin-wrapper {
             display: flex;
@@ -18,12 +13,14 @@
         }
 
         .admin-sidebar {
-            width: 260px;
+            width: 250px;
             background-color: #2B1A12;
             color: #FFFAF3;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
+            float: left;
+            min-height: 100vh;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
         }
 
@@ -63,8 +60,7 @@
         }
 
         .admin-menu-link {
-            display: flex;
-            align-items: center;
+            display: block;
             padding: 14px 24px;
             color: #D9C6B5;
             font-size: 14px;
@@ -82,6 +78,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
         .admin-topbar {
@@ -99,6 +96,8 @@
             font-size: 18px;
             font-weight: 700;
             color: #2B1A12;
+            display: inline-block;
+            float: left;
         }
 
         .admin-container {
@@ -115,17 +114,14 @@
             color: #7A685D;
         }
     </style>
-
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
-
 <form id="form1" runat="server">
 
     <div class="admin-wrapper">
-        
-        <!-- SIDEBAR -->
+        <!-- SIDEBAR (LEFT) -->
         <aside class="admin-sidebar">
             <div class="admin-brand">
                 <h2>SkillSync</h2>
@@ -134,38 +130,24 @@
 
             <ul class="admin-menu">
                 <li class="admin-menu-item">
-                    <asp:HyperLink ID="NavDashboard" runat="server" NavigateUrl="~/Pages/admin/AdminDashboard.aspx" CssClass="admin-menu-link">
-                        📊 Dashboard Overview
-                    </asp:HyperLink>
+                    <asp:HyperLink ID="NavDashboard" runat="server" NavigateUrl="~/Pages/admin/AdminDashboard.aspx" CssClass="admin-menu-link">Dashboard Overview</asp:HyperLink>
                 </li>
-
                 <li class="admin-menu-item">
-                    <asp:HyperLink ID="NavUsers" runat="server" NavigateUrl="~/Pages/admin/ManageUsers.aspx" CssClass="admin-menu-link">
-                        👥 Manage Users
-                    </asp:HyperLink>
+                    <asp:HyperLink ID="NavUsers" runat="server" NavigateUrl="~/Pages/admin/ManageUsers.aspx" CssClass="admin-menu-link">Manage Users</asp:HyperLink>
                 </li>
-
                 <li class="admin-menu-item">
-                    <asp:HyperLink ID="NavServices" runat="server" NavigateUrl="~/Pages/admin/ManageServices.aspx" CssClass="admin-menu-link">
-                        💼 Manage Services
-                    </asp:HyperLink>
+                    <asp:HyperLink ID="NavServices" runat="server" NavigateUrl="~/Pages/admin/ManageServices.aspx" CssClass="admin-menu-link">Manage Services</asp:HyperLink>
                 </li>
-
                 <li class="admin-menu-item">
-                    <asp:HyperLink ID="NavOrders" runat="server" NavigateUrl="~/Pages/admin/ManageOrders.aspx" CssClass="admin-menu-link">
-                        📦 Manage Orders
-                    </asp:HyperLink>
+                    <asp:HyperLink ID="NavOrders" runat="server" NavigateUrl="~/Pages/admin/ManageOrders.aspx" CssClass="admin-menu-link">Manage Orders</asp:HyperLink>
                 </li>
-
                 <li class="admin-menu-item" style="margin-top: 30px; border-top: 1px solid #4B3529; padding-top: 10px;">
-                    <asp:HyperLink ID="NavClientSite" runat="server" NavigateUrl="~/Pages/client/Home.aspx" CssClass="admin-menu-link">
-                        🌐 Client Portal
-                    </asp:HyperLink>
+                    <asp:HyperLink ID="NavClientSite" runat="server" NavigateUrl="~/Pages/client/Home.aspx" CssClass="admin-menu-link">Client Portal</asp:HyperLink>
                 </li>
             </ul>
         </aside>
 
-        <!-- MAIN AREA -->
+        <!-- MAIN CONTENT (RIGHT) -->
         <div class="admin-main">
             <!-- TOPBAR -->
             <header class="admin-topbar">
@@ -175,7 +157,7 @@
                 </div>
             </header>
 
-            <!-- CONTENT -->
+            <!-- CONTENT PLACEHOLDER -->
             <main class="admin-container">
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                 </asp:ContentPlaceHolder>
@@ -183,13 +165,12 @@
 
             <!-- FOOTER -->
             <footer class="admin-footer">
-                © 2026 SkillSync Admin Portal. Internal Management Console.
+                &copy; 2026 SkillSync Admin Portal. Internal Management Console.
             </footer>
         </div>
-
+        <div style="clear: both;"></div>
     </div>
 
 </form>
-
 </body>
 </html>

@@ -65,7 +65,7 @@ a {
 
 .main-content {
     width: 100%;
-    min-height: calc(100vh - 400px);
+    min-height: calc(100vh - 380px);
 }
 
 /* =========================================================
@@ -97,7 +97,7 @@ a {
 }
 
 .brand-logo img {
-    height: 48px;
+    height: 44px;
     width: auto;
     display: block;
 }
@@ -213,92 +213,40 @@ a {
 }
 
 /* =========================================================
-   FOOTER (CLIENT - CollegeHunt Inspired)
+   FOOTER (CLIENT)
    ========================================================= */
 
 .main-footer {
-    background: linear-gradient(180deg, #2B1A12 0%, #1A0F0B 100%);
+    background-color: var(--primary-dark);
     color: var(--bg-cream-light);
-    margin-top: 90px;
-    padding: 70px 0 28px;
+    margin-top: 80px;
+    padding: 60px 0 30px;
     border-top: 4px solid var(--accent-gold);
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 2.2fr 1fr 1fr 1fr;
-    gap: 48px;
-    margin-bottom: 50px;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
 }
 
-.footer-brand-logo-card {
-    display: inline-flex;
-    align-items: center;
-    background: var(--bg-cream-light);
-    padding: 10px 18px;
-    border-radius: var(--radius-md);
-    margin-bottom: 18px;
-    border: 1px solid rgba(201, 154, 91, 0.3);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+.footer-brand h3 {
+    color: var(--bg-cream);
+    font-size: 26px;
+    margin-bottom: 12px;
 }
 
-.footer-brand-logo-card img {
-    height: 42px;
-    width: auto;
-    display: block;
-}
-
-.footer-tagline {
-    color: var(--accent-gold);
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-}
-
-.footer-brand-desc {
+.footer-brand p {
     color: #CDB9A8;
     font-size: 14px;
-    line-height: 1.6;
-    max-width: 360px;
-}
-
-.footer-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 20px;
-}
-
-.footer-pill {
-    background: rgba(201, 154, 91, 0.12);
-    color: #E6C594;
-    border: 1px solid rgba(201, 154, 91, 0.25);
-    padding: 5px 14px;
-    border-radius: var(--radius-pill);
-    font-size: 12px;
-    font-weight: 500;
+    max-width: 320px;
 }
 
 .footer-column h4 {
     color: var(--bg-cream);
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 22px;
-    position: relative;
-    padding-bottom: 10px;
-}
-
-.footer-column h4::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 32px;
-    height: 2px;
-    background-color: var(--accent-gold);
-    border-radius: 2px;
+    font-size: 16px;
+    margin-bottom: 18px;
 }
 
 .footer-links {
@@ -306,21 +254,17 @@ a {
 }
 
 .footer-links li {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .footer-links a {
     color: #D9C6B5;
     font-size: 14px;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
 }
 
 .footer-links a:hover {
     color: var(--accent-gold);
-    transform: translateX(4px);
+    padding-left: 4px;
 }
 
 .footer-bottom {
@@ -331,17 +275,6 @@ a {
     justify-content: space-between;
     color: #A9907E;
     font-size: 13px;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
-.footer-bottom-badge {
-    background: #3A2317;
-    color: #D9C6B5;
-    padding: 4px 12px;
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    border: 1px solid #4B3529;
 }
 
 /* =========================================================
@@ -359,14 +292,10 @@ a {
         grid-template-columns: 1fr;
     }
     .nav-links {
-        gap: 10px;
+        gap: 12px;
     }
     .nav-link {
         font-size: 13px;
         padding: 6px 8px;
-    }
-    .footer-bottom {
-        flex-direction: column;
-        text-align: center;
     }
 }
