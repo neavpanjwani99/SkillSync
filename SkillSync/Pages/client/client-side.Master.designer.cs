@@ -60,6 +60,11 @@ namespace SkillSync
         protected global::System.Web.UI.WebControls.HyperLink LoginLink;
 
         /// <summary>
+        /// LogoutLink control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.HyperLink LogoutLink;
+
+        /// <summary>
         /// FooterLogoLink control.
         /// </summary>
         protected global::System.Web.UI.WebControls.HyperLink FooterLogoLink;

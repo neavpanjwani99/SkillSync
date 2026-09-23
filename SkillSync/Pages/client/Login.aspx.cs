@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
 
@@ -7,105 +6,110 @@ namespace SkillSync.Pages.client
 {
     public partial class Login : System.Web.UI.Page
     {
-        // Page Load Event - Runs when the login page opens
+        // Practical 12 style: Connection string aur SqlCommand declare kar rahe hain
+        SqlConnection cn = new SqlConnection(@"Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True");
+        SqlCommand co = new SqlCommand();
+
+        // Page Load Event: Database Connection open karenge
         protected void Page_Load(object sender, EventArgs e)
         {
+            cn.Open();
+            co.Connection = cn;
+
             if (!IsPostBack)
             {
-                // Reset feedback message on fresh page load
                 lblMessage.Visible = false;
             }
         }
 
-        // Login Button Click Event - Validates user against SQL Server database
+        // Login Button Click Event: Credentials verify karke redirect karenge
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            // Step 1: Get inputs entered by user
-            string email = txtEmail.Text.Trim();
-            string password = txtPassword.Text.Trim();
+            string email = txtEmail.Text;
+            string password = txtPassword.Text;
             string selectedRole = ddlUserRole.SelectedValue;
 
-            // Basic validation for empty fields
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            if (email == "" || password == "")
             {
-                lblMessage.Text = "Please enter both Email and Password to continue.";
+                lblMessage.Text = "Please enter both Email and Password.";
                 lblMessage.Visible = true;
                 return;
             }
 
-            try
-            {
-                // Step 2: Prepare SQL Query to find matching user in USERS table
-                // Following Practical 12 ADO.NET style with parameters for security
-                using (SqlConnection con = DbHelper.GetConnection())
-                {
-                    string sqlQuery = "SELECT UserID, FullName, Email, UserType FROM USERS WHERE Email=@Email AND Password=@Password AND UserType=@UserType";
-                    
-                    using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
-                    {
-                        // Add parameters to prevent SQL injection
-                        cmd.Parameters.AddWithValue("@Email", email);
-                        cmd.Parameters.AddWithValue("@Password", password);
-                        cmd.Parameters.AddWithValue("@UserType", selectedRole);
+            // SQL Select Query string query set kar rahe hain
+            co.CommandText = "select * from USERS where Email='" + email + "' and Password='" + password + "' and UserType='" + selectedRole + "'";
 
-                        // Step 3: Execute query using SqlDataReader
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                // Step 4: User found! Save details in Session variables
-                                Session["UserID"] = reader["UserID"].ToString();
-                                Session["UserName"] = reader["FullName"].ToString();
-                                Session["UserType"] = reader["UserType"].ToString();
+            // SqlDataReader run karke record verify kar rahe hain
+            SqlDataReader dr = co.ExecuteReader();
 
-                                // Step 5: Redirect user based on their role
-                                if (selectedRole == "Admin")
-                                {
-                                    Response.Redirect("../admin/AdminDashboard.aspx");
-                                }
-                                else
-                                {
-                                    Response.Redirect("Home.aspx");
-                                }
-                            }
-                            else
-                            {
-                                // User not found in database: allow fallback for testing or show error
-                                if ((email == "admin@skillsync.com" || email == "admin") && selectedRole == "Admin")
-                                {
-                                    Session["UserID"] = "1";
-                                    Session["UserName"] = "Admin User";
-                                    Session["UserType"] = "Admin";
-                                    Response.Redirect("../admin/AdminDashboard.aspx");
-                                }
-                                else
-                                {
-                                    lblMessage.Text = "Invalid Email, Password, or Role selection. Please try again.";
-                                    lblMessage.Visible = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
+            if (dr.Read())
             {
-                // Fallback login if database is offline during local practical testing
+                // User matching mil gaya - Admin ya Client Home page par direct redirect with login status
                 if (selectedRole == "Admin")
                 {
-                    Session["UserID"] = "1";
-                    Session["UserName"] = "Admin User";
-                    Session["UserType"] = "Admin";
                     Response.Redirect("../admin/AdminDashboard.aspx");
                 }
                 else
                 {
-                    Session["UserID"] = "2";
-                    Session["UserName"] = "Demo User";
-                    Session["UserType"] = selectedRole;
-                    Response.Redirect("Home.aspx");
+                    Response.Redirect("Home.aspx?loggedIn=true&user=" + Server.UrlEncode(email));
                 }
             }
+            else
+            {
+                lblMessage.Text = "Invalid Email, Password or Role selection.";
+                lblMessage.Visible = true;
+            }
+        }
+
+        // Toggle Button Event: Login Form aur Register Form ke beech switch karne ke liye
+        protected void btnToggleMode_Click(object sender, EventArgs e)
+        {
+            if (pnlLogin.Visible)
+            {
+                pnlLogin.Visible = false;
+                pnlRegister.Visible = true;
+                btnToggleMode.Text = "Already have an account? Sign In";
+            }
+            else
+            {
+                pnlLogin.Visible = true;
+                pnlRegister.Visible = false;
+                btnToggleMode.Text = "Don't have an account? Register Now";
+            }
+
+            lblMessage.Visible = false;
+        }
+
+        // Register New Client Account Button Event: Client user ko USERS table me insert karna
+        protected void btnRegisterClient_Click(object sender, EventArgs e)
+        {
+            string name = txtRegName.Text;
+            string email = txtRegEmail.Text;
+            string password = txtRegPassword.Text;
+            string location = txtRegLocation.Text;
+
+            if (location == "")
+            {
+                location = "Mumbai";
+            }
+
+            if (name == "" || email == "" || password == "")
+            {
+                lblMessage.Text = "Please fill in all required registration fields.";
+                lblMessage.Visible = true;
+                return;
+            }
+
+            // Practical 12 style SQL Insert Query string set kar rahe hain (UserType = 'Client')
+            string sql = "insert into USERS (UserID, FullName, Email, Password, UserType, Location, Status, CreatedDate) values ((select isnull(max(UserID), 0) + 1 from USERS), '" + name + "', '" + email + "', '" + password + "', 'Client', '" + location + "', 'Active', GETDATE())";
+
+            co.CommandText = sql;
+
+            // Query execute karke database me record insert kar rahe hain
+            co.ExecuteNonQuery();
+
+            // Successful registration message & direct redirect to Home Page
+            Response.Redirect("Home.aspx?loggedIn=true&user=" + Server.UrlEncode(email));
         }
     }
 }

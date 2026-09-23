@@ -134,10 +134,10 @@
                 <div class="form-group">
                     <asp:Label ID="lblDelivery" runat="server" CssClass="form-label" Text="Expected Delivery Time *" />
                     <asp:DropDownList ID="ddlDeliveryTime" runat="server" CssClass="form-control">
-                        <asp:ListItem Text="Within 3 Days" Value="3Days" />
-                        <asp:ListItem Text="Within 1 Week" Value="1Week" Selected="True" />
-                        <asp:ListItem Text="Within 2 Weeks" Value="2Weeks" />
-                        <asp:ListItem Text="Within 1 Month" Value="1Month" />
+                        <asp:ListItem Text="Within 3 Days" Value="3" />
+                        <asp:ListItem Text="Within 1 Week" Value="7" Selected="True" />
+                        <asp:ListItem Text="Within 2 Weeks" Value="14" />
+                        <asp:ListItem Text="Within 1 Month" Value="30" />
                     </asp:DropDownList>
                 </div>
 

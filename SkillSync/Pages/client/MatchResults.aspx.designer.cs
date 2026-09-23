@@ -70,43 +70,23 @@ namespace SkillSync.Pages.client
         protected global::System.Web.UI.WebControls.Button btnApplyFilter;
 
         /// <summary>
-        /// imgM1 control.
+        /// ddlSelectFreelancerID control.
         /// </summary>
-        protected global::System.Web.UI.WebControls.Image imgM1;
+        protected global::System.Web.UI.WebControls.DropDownList ddlSelectFreelancerID;
 
         /// <summary>
-        /// hlComp1 control.
+        /// pnlHireSuccess control.
         /// </summary>
-        protected global::System.Web.UI.WebControls.HyperLink hlComp1;
+        protected global::System.Web.UI.WebControls.Panel pnlHireSuccess;
 
         /// <summary>
-        /// imgM2 control.
+        /// lblHireMsg control.
         /// </summary>
-        protected global::System.Web.UI.WebControls.Image imgM2;
+        protected global::System.Web.UI.WebControls.Label lblHireMsg;
 
         /// <summary>
-        /// hlComp2 control.
+        /// rptMatchResults control.
         /// </summary>
-        protected global::System.Web.UI.WebControls.HyperLink hlComp2;
-
-        /// <summary>
-        /// imgM3 control.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Image imgM3;
-
-        /// <summary>
-        /// hlComp3 control.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.HyperLink hlComp3;
-
-        /// <summary>
-        /// imgM4 control.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Image imgM4;
-
-        /// <summary>
-        /// hlComp4 control.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.HyperLink hlComp4;
+        protected global::System.Web.UI.WebControls.Repeater rptMatchResults;
     }
 }

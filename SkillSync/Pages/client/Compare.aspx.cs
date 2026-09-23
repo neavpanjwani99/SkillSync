@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -8,79 +7,54 @@ namespace SkillSync.Pages.client
 {
     public partial class Compare : System.Web.UI.Page
     {
-        // Page Load Event - Initializes candidate dropdowns from SQL database
+        // Connection string aur SqlCommand Practical 12 style me declare kar rahe hain
+        SqlConnection cn = new SqlConnection(@"Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True");
+        SqlCommand co = new SqlCommand();
+
+        // Page Load Event: Database Connection open karenge aur Candidate dropdown fill karenge
         protected void Page_Load(object sender, EventArgs e)
         {
+            cn.Open();
+            co.Connection = cn;
+
             if (!IsPostBack)
             {
-                LoadCandidatesFromDatabase();
+                // Candidates DropDown list fill kar rahe hain
+                LoadCandidates();
             }
         }
 
-        // Helper method to load freelancer list into comparison dropdowns using ADO.NET
-        private void LoadCandidatesFromDatabase()
+        // Database se Freelancer users read karke dropdown list me bind kar rahe hain
+        private void LoadCandidates()
         {
-            try
-            {
-                // Step 1: Query database for active freelancers
-                string sqlQuery = "SELECT UserID, FullName FROM USERS WHERE UserType = 'Freelancer' ORDER BY FullName ASC";
-                DataTable dtFreelancers = DbHelper.ExecuteQuery(sqlQuery);
+            co.CommandText = "select UserID, FullName from USERS where UserType='Freelancer' order by FullName asc";
+            SqlDataReader dr = co.ExecuteReader();
 
-                if (dtFreelancers.Rows.Count > 0)
-                {
-                    // Bind Candidate 1 DropDown
-                    ddlCandidate1.DataSource = dtFreelancers;
-                    ddlCandidate1.DataTextField = "FullName";
-                    ddlCandidate1.DataValueField = "UserID";
-                    ddlCandidate1.DataBind();
+            ddlCandidate1.Items.Clear();
+            ddlCandidate2.Items.Clear();
 
-                    // Bind Candidate 2 DropDown
-                    ddlCandidate2.DataSource = dtFreelancers;
-                    ddlCandidate2.DataTextField = "FullName";
-                    ddlCandidate2.DataValueField = "UserID";
-                    ddlCandidate2.DataBind();
-                }
-            }
-            catch (Exception ex)
+            while (dr.Read())
             {
-                // Fallback handled by default markup items
+                string id = dr["UserID"].ToString();
+                string name = dr["FullName"].ToString();
+
+                ddlCandidate1.Items.Add(new ListItem(name, id));
+                ddlCandidate2.Items.Add(new ListItem(name, id));
             }
+
+            dr.Close();
         }
 
         // Compare Candidates Button Click Event
         protected void btnCompare_Click(object sender, EventArgs e)
         {
-            // Step 1: Get selected candidate IDs
-            string candidate1Id = ddlCandidate1.SelectedValue;
-            string candidate2Id = ddlCandidate2.SelectedValue;
+            string cand1Id = ddlCandidate1.SelectedValue;
+            string cand2Id = ddlCandidate2.SelectedValue;
 
-            // Step 2: Fetch detailed profile data for selected candidates from USERS & SERVICES tables
-            try
-            {
-                string sql = @"SELECT u.FullName, u.Location, s.ServiceTitle, s.Price, s.DeliveryDays, s.ExperienceYears 
-                               FROM USERS u 
-                               LEFT JOIN SERVICES s ON u.UserID = s.FreelancerID 
-                               WHERE u.UserID IN (@ID1, @ID2)";
-
-                using (SqlConnection con = DbHelper.GetConnection())
-                {
-                    using (SqlCommand cmd = new SqlCommand(sql, con))
-                    {
-                        cmd.Parameters.AddWithValue("@ID1", candidate1Id);
-                        cmd.Parameters.AddWithValue("@ID2", candidate2Id);
-
-                        DataTable dtResult = new DataTable();
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                        {
-                            da.Fill(dtResult);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Smooth execution
-            }
+            // Candidate details query run kar rahe hain
+            co.CommandText = "select * from USERS where UserID=" + cand1Id;
+            SqlDataReader dr = co.ExecuteReader();
+            dr.Close();
         }
     }
 }

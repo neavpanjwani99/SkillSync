@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -8,111 +7,79 @@ namespace SkillSync.Pages.client
 {
     public partial class WebForm2 : System.Web.UI.Page
     {
-        // Page Load Event - Initializes categories dropdown list from database
+        // Connection string aur SqlCommand Practical 12 pattern me declare kar rahe hain
+        SqlConnection cn = new SqlConnection(@"Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True");
+        SqlCommand co = new SqlCommand();
+
+        // Page Load Event: Database Connection open karenge
         protected void Page_Load(object sender, EventArgs e)
         {
+            cn.Open();
+            co.Connection = cn;
+
             if (!IsPostBack)
             {
-                LoadFormCategories();
+                // Categories DropDown fill kar rahe hain
+                LoadCategories();
             }
         }
 
-        // Helper method to load categories from CATEGORIES table using ADO.NET
-        private void LoadFormCategories()
+        // Database se Categories fetch karke Form dropdown fill kar rahe hain
+        private void LoadCategories()
         {
-            try
-            {
-                string sqlQuery = "SELECT CategoryID, CategoryName FROM CATEGORIES ORDER BY CategoryName ASC";
-                DataTable dt = DbHelper.ExecuteQuery(sqlQuery);
+            co.CommandText = "select CategoryID, CategoryName from CATEGORIES order by CategoryName asc";
+            SqlDataReader dr = co.ExecuteReader();
 
-                if (dt.Rows.Count > 0)
-                {
-                    ddlFormCategory.DataSource = dt;
-                    ddlFormCategory.DataTextField = "CategoryName";
-                    ddlFormCategory.DataValueField = "CategoryID";
-                    ddlFormCategory.DataBind();
-                }
+            ddlFormCategory.Items.Clear();
+            ddlFormCategory.Items.Add(new ListItem("-- Select Project Category --", "0"));
 
-                ddlFormCategory.Items.Insert(0, new ListItem("-- Select Project Category --", "0"));
-            }
-            catch (Exception ex)
+            while (dr.Read())
             {
-                if (ddlFormCategory.Items.Count == 0)
-                {
-                    ddlFormCategory.Items.Add(new ListItem("-- Select Project Category --", "0"));
-                    ddlFormCategory.Items.Add(new ListItem("Web Development", "1"));
-                    ddlFormCategory.Items.Add(new ListItem("Mobile App Development", "2"));
-                    ddlFormCategory.Items.Add(new ListItem("UI/UX Design", "3"));
-                    ddlFormCategory.Items.Add(new ListItem("Graphic Design", "4"));
-                }
+                ddlFormCategory.Items.Add(new ListItem(dr["CategoryName"].ToString(), dr["CategoryID"].ToString()));
             }
+
+            dr.Close();
         }
 
-        // Submit Requirement Form Event
+        // Submit Requirement Button Event: Database me project requirement insert karna
         protected void btnSubmitRequirement_Click(object sender, EventArgs e)
         {
-            // Step 1: Collect user input from form controls
-            string categoryName = ddlFormCategory.SelectedItem != null ? ddlFormCategory.SelectedItem.Text : "Web Development";
-            int categoryId = 1;
-            int.TryParse(ddlFormCategory.SelectedValue, out categoryId);
-            if (categoryId <= 0) categoryId = 1;
+            // Form inputs read kar rahe hain
+            string catName = ddlFormCategory.SelectedItem != null ? ddlFormCategory.SelectedItem.Text : "Web Development";
+            string catId = ddlFormCategory.SelectedValue != "0" ? ddlFormCategory.SelectedValue : "1";
+            string skills = txtSkills.Text;
+            string minBudget = txtMinBudget.Text == "" ? "0" : txtMinBudget.Text;
+            string maxBudget = txtMaxBudget.Text == "" ? "10000" : txtMaxBudget.Text;
+            string deliveryDays = ddlDeliveryTime.SelectedValue;
 
-            string skills = txtSkills.Text.Trim();
-            int minBudget = 0, maxBudget = 10000;
-            int.TryParse(txtMinBudget.Text.Trim(), out minBudget);
-            int.TryParse(txtMaxBudget.Text.Trim(), out maxBudget);
-            if (maxBudget <= 0) maxBudget = 10000;
+            if (deliveryDays == "3Days") deliveryDays = "3";
+            if (deliveryDays == "1Week") deliveryDays = "7";
+            if (deliveryDays == "2Weeks") deliveryDays = "14";
+            if (deliveryDays == "1Month") deliveryDays = "30";
+            if (deliveryDays == "" || deliveryDays == null) deliveryDays = "7";
 
-            string deliveryDaysStr = ddlDeliveryTime.SelectedValue;
-            int deliveryDays = 7;
-            int.TryParse(deliveryDaysStr, out deliveryDays);
-            if (deliveryDays <= 0) deliveryDays = 7;
-
-            string experience = ddlExperience.SelectedValue;
-            string location = txtLocation.Text.Trim();
-            string workMode = rblWorkMode.SelectedValue;
+            string exp = ddlExperience.SelectedValue;
+            string loc = txtLocation.Text;
+            string mode = rblWorkMode.SelectedValue;
             string priority = rblPriority.SelectedValue;
 
-            int clientUserId = 2; // Default demo client ID
-            if (Session["UserID"] != null)
-            {
-                int.TryParse(Session["UserID"].ToString(), out clientUserId);
-            }
+            // Practical 12 style: Dynamic RequirementID SQL Insert Query string banayein
+            string sql = "insert into PROJECT_REQUIREMENTS (RequirementID, ClientID, CategoryID, RequiredSkills, MinBudget, MaxBudget, DeliveryDays, ExperienceRequired, Location, WorkMode, PriorityFilter) values ((select isnull(max(RequirementID), 0) + 1 from PROJECT_REQUIREMENTS), 1, " + catId + ", '" + skills + "', " + minBudget + ", " + maxBudget + ", " + deliveryDays + ", '" + exp + "', '" + loc + "', '" + mode + "', '" + priority + "')";
 
-            // Step 2: Insert requirement record into PROJECT_REQUIREMENTS table
-            try
-            {
-                using (SqlConnection con = DbHelper.GetConnection())
-                {
-                    string insertSql = @"INSERT INTO PROJECT_REQUIREMENTS 
-                                        (ClientID, CategoryID, RequiredSkills, MinBudget, MaxBudget, DeliveryDays, ExperienceRequired, Location, WorkMode, PriorityFilter) 
-                                        VALUES 
-                                        (@ClientID, @CategoryID, @RequiredSkills, @MinBudget, @MaxBudget, @DeliveryDays, @ExperienceRequired, @Location, @WorkMode, @PriorityFilter)";
+            co.CommandText = sql;
 
-                    using (SqlCommand cmd = new SqlCommand(insertSql, con))
-                    {
-                        cmd.Parameters.AddWithValue("@ClientID", clientUserId);
-                        cmd.Parameters.AddWithValue("@CategoryID", categoryId);
-                        cmd.Parameters.AddWithValue("@RequiredSkills", string.IsNullOrEmpty(skills) ? "General Requirement" : skills);
-                        cmd.Parameters.AddWithValue("@MinBudget", minBudget);
-                        cmd.Parameters.AddWithValue("@MaxBudget", maxBudget);
-                        cmd.Parameters.AddWithValue("@DeliveryDays", deliveryDays);
-                        cmd.Parameters.AddWithValue("@ExperienceRequired", string.IsNullOrEmpty(experience) ? "Intermediate" : experience);
-                        cmd.Parameters.AddWithValue("@Location", string.IsNullOrEmpty(location) ? "Remote" : location);
-                        cmd.Parameters.AddWithValue("@WorkMode", string.IsNullOrEmpty(workMode) ? "Remote" : workMode);
-                        cmd.Parameters.AddWithValue("@PriorityFilter", string.IsNullOrEmpty(priority) ? "Match Score" : priority);
+            // Query execute karke database me record insert kar rahe hain
+            co.ExecuteNonQuery();
 
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Continue smooth flow to match results page even if offline
-            }
+            // Login parameters retain karenge agar user logged in hai
+            string userParam = Request.QueryString["user"];
+            string loggedInParam = Request.QueryString["loggedIn"];
+            string loginQuery = "";
+            if (loggedInParam == "true") loginQuery = "&loggedIn=true";
+            if (userParam != null && userParam != "") loginQuery += "&user=" + Server.UrlEncode(userParam);
 
-            // Step 3: Redirect user to MatchResults.aspx with QueryString parameters
-            Response.Redirect($"MatchResults.aspx?cat={Server.UrlEncode(categoryName)}&skills={Server.UrlEncode(skills)}&min={minBudget}&max={maxBudget}&exp={Server.UrlEncode(experience)}&loc={Server.UrlEncode(location)}&mode={Server.UrlEncode(workMode)}");
+            // Record insert hone ke baad MatchResults page par redirect kar rahe hain
+            Response.Redirect("MatchResults.aspx?cat=" + Server.UrlEncode(catName) + "&skills=" + Server.UrlEncode(skills) + "&min=" + minBudget + "&max=" + maxBudget + "&exp=" + Server.UrlEncode(exp) + "&loc=" + Server.UrlEncode(loc) + "&mode=" + Server.UrlEncode(mode) + loginQuery);
         }
     }
 }

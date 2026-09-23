@@ -7,48 +7,84 @@ namespace SkillSync.Pages.admin
 {
     public partial class AdminDashboard : System.Web.UI.Page
     {
-        // Page Load Event - Validates admin session and loads real-time database stats
+        // Connection string aur SqlCommand Practical 12 style me declare kar rahe hain
+        SqlConnection cn = new SqlConnection(@"Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True");
+        SqlCommand co = new SqlCommand();
+
+        // Page Load Event: Database Connection open karenge aur statistics load karenge
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Step 1: Security Check - Ensure only Admin users can access this page
-            if (Session["UserType"] != null && Session["UserType"].ToString() != "Admin")
-            {
-                Response.Redirect("../client/Login.aspx");
-                return;
-            }
+            cn.Open();
+            co.Connection = cn;
 
             if (!IsPostBack)
             {
-                // Step 2: Load marketplace stats from SQL database
-                LoadDashboardStatistics();
+                // Database se statistics aur lists load kar rahe hain
+                LoadCounts();
+                LoadCategoryBreakdown();
+                LoadOrderStatusCounts();
+                LoadRecentActivity();
             }
         }
 
-        // Helper method to fetch total counts from database using ADO.NET ExecuteScalar
-        private void LoadDashboardStatistics()
+        // Practical 12 style: ExecuteScalar se total counts fetch kar rahe hain
+        private void LoadCounts()
         {
-            try
-            {
-                // Query 1: Total Users
-                object usersObj = DbHelper.ExecuteScalar("SELECT COUNT(*) FROM USERS");
-                int totalUsers = usersObj != null ? Convert.ToInt32(usersObj) : 0;
+            // Query 1: Total Users Count
+            co.CommandText = "select count(*) from USERS";
+            lblTotalUsers.Text = co.ExecuteScalar().ToString();
 
-                // Query 2: Total Freelancers
-                object freelancersObj = DbHelper.ExecuteScalar("SELECT COUNT(*) FROM USERS WHERE UserType = 'Freelancer'");
-                int totalFreelancers = freelancersObj != null ? Convert.ToInt32(freelancersObj) : 0;
+            // Query 2: Total Freelancers Count
+            co.CommandText = "select count(*) from USERS where UserType='Freelancer'";
+            lblTotalFreelancers.Text = co.ExecuteScalar().ToString();
 
-                // Query 3: Total Active Services
-                object servicesObj = DbHelper.ExecuteScalar("SELECT COUNT(*) FROM SERVICES");
-                int totalServices = servicesObj != null ? Convert.ToInt32(servicesObj) : 0;
+            // Query 3: Total Active Services Count
+            co.CommandText = "select count(*) from SERVICES";
+            lblTotalServices.Text = co.ExecuteScalar().ToString();
 
-                // Query 4: Total Orders
-                object ordersObj = DbHelper.ExecuteScalar("SELECT COUNT(*) FROM ORDERS");
-                int totalOrders = ordersObj != null ? Convert.ToInt32(ordersObj) : 0;
-            }
-            catch (Exception ex)
-            {
-                // Continue smooth rendering if DB is initializing
-            }
+            // Query 4: Total Orders Count
+            co.CommandText = "select count(*) from ORDERS";
+            lblTotalOrders.Text = co.ExecuteScalar().ToString();
+        }
+
+        // Database se category wise service breakdown fetch karna
+        private void LoadCategoryBreakdown()
+        {
+            SqlDataAdapter da = new SqlDataAdapter("select c.CategoryName, count(s.ServiceID) as ServiceCount, isnull(avg(s.Price), 0) as AvgPrice from CATEGORIES c left join SERVICES s on c.CategoryID = s.CategoryID group by c.CategoryName order by ServiceCount desc", cn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            rptTopCategories.DataSource = dt;
+            rptTopCategories.DataBind();
+        }
+
+        // Database se order status counts fetch karna
+        private void LoadOrderStatusCounts()
+        {
+            co.CommandText = "select count(*) from ORDERS where Status='Pending'";
+            lblPendingOrders.Text = co.ExecuteScalar().ToString();
+
+            co.CommandText = "select count(*) from ORDERS where Status in ('Active', 'In Progress', 'Accepted')";
+            lblInProgressOrders.Text = co.ExecuteScalar().ToString();
+
+            co.CommandText = "select count(*) from ORDERS where Status='Completed'";
+            lblCompletedOrders.Text = co.ExecuteScalar().ToString();
+
+            co.CommandText = "select count(*) from ORDERS where Status='Cancelled'";
+            lblCancelledOrders.Text = co.ExecuteScalar().ToString();
+        }
+
+        // Database se top recent users fetch karke activity log me bind karna
+        private void LoadRecentActivity()
+        {
+            SqlDataAdapter da = new SqlDataAdapter("select top 5 FullName, Email, UserType, Location, CreatedDate from USERS order by UserID desc", cn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            rptRecentActivity.DataSource = dt;
+            rptRecentActivity.DataBind();
         }
     }
 }
+
+

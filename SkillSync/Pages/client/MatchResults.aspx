@@ -261,222 +261,108 @@
 
             <!-- SIDEBAR FILTERS -->
             <aside class="filter-sidebar">
-                <div class="filter-title">Filter Results</div>
+                <div class="filter-title">Filter &amp; Select Freelancer</div>
 
                 <div class="filter-group">
-                    <label>Category</label>
+                    <label>Select Freelancer by ID / Name</label>
+                    <asp:DropDownList ID="ddlSelectFreelancerID" runat="server" CssClass="filter-control" AutoPostBack="true" OnSelectedIndexChanged="ddlSelectFreelancerID_SelectedIndexChanged">
+                    </asp:DropDownList>
+                </div>
+
+                <div class="filter-group">
+                    <label>Category Filter</label>
                     <asp:DropDownList ID="ddlFiltCat" runat="server" CssClass="filter-control">
-                        <asp:ListItem Text="Web Development" Selected="True" />
-                        <asp:ListItem Text="UI/UX Design" />
-                        <asp:ListItem Text="Graphic Design" />
+                        <asp:ListItem Text="All Categories" Value="All" />
+                        <asp:ListItem Text="Web Development" Value="Web Development" Selected="True" />
+                        <asp:ListItem Text="UI/UX Design" Value="UI/UX Design" />
+                        <asp:ListItem Text="Graphic Design" Value="Graphic Design" />
                     </asp:DropDownList>
                 </div>
 
                 <div class="filter-group">
                     <label>Max Budget (&#8377;)</label>
                     <asp:DropDownList ID="ddlFiltBudget" runat="server" CssClass="filter-control">
-                        <asp:ListItem Text="Any Budget" />
-                        <asp:ListItem Text="Under &#8377;5,000" />
-                        <asp:ListItem Text="Under &#8377;10,000" Selected="True" />
-                        <asp:ListItem Text="Under &#8377;15,000" />
+                        <asp:ListItem Text="Any Budget" Value="0" />
+                        <asp:ListItem Text="Under &#8377;5,000" Value="5000" />
+                        <asp:ListItem Text="Under &#8377;10,000" Value="10000" Selected="True" />
+                        <asp:ListItem Text="Under &#8377;15,000" Value="15000" />
                     </asp:DropDownList>
                 </div>
 
                 <div class="filter-group">
                     <label>Experience</label>
                     <asp:DropDownList ID="ddlFiltExp" runat="server" CssClass="filter-control">
-                        <asp:ListItem Text="Any Experience" />
-                        <asp:ListItem Text="2+ Years" Selected="True" />
-                        <asp:ListItem Text="3+ Years" />
+                        <asp:ListItem Text="Any Experience" Value="0" />
+                        <asp:ListItem Text="2+ Years" Value="2" Selected="True" />
+                        <asp:ListItem Text="3+ Years" Value="3" />
                     </asp:DropDownList>
                 </div>
 
                 <div class="filter-group">
                     <label>Work Mode</label>
                     <asp:DropDownList ID="ddlFiltMode" runat="server" CssClass="filter-control">
-                        <asp:ListItem Text="All Modes" />
-                        <asp:ListItem Text="Remote" Selected="True" />
-                        <asp:ListItem Text="In-Person" />
+                        <asp:ListItem Text="All Modes" Value="All" />
+                        <asp:ListItem Text="Remote" Value="Remote" Selected="True" />
+                        <asp:ListItem Text="In-Person" Value="In-Person" />
                     </asp:DropDownList>
                 </div>
 
-                <asp:Button ID="btnApplyFilter" runat="server" Text="Apply Filters" CssClass="btn-secondary" style="width: 100%; margin-top: 10px;" />
+                <asp:Button ID="btnApplyFilter" runat="server" Text="Apply Filters" OnClick="btnApplyFilter_Click" CssClass="btn-secondary" style="width: 100%; margin-top: 10px;" />
             </aside>
 
             <!-- RESULT CARDS GRID -->
             <div>
+                <!-- SUCCESS / ORDER CONFIRMATION BANNER -->
+                <asp:Panel ID="pnlHireSuccess" runat="server" Visible="false" style="background: #D4EDDA; color: #155724; border: 1px solid #C3E6CB; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600;">
+                    <asp:Label ID="lblHireMsg" runat="server" />
+                </asp:Panel>
 
-                <!-- CARD 1 (94% Match) -->
-                <div class="match-card">
-                    <div class="match-avatar-col">
-                        <asp:Image ID="imgM1" runat="server" ImageUrl="~/images/freelancer1.jpg" CssClass="match-avatar-img" AlternateText="Aarav Mehta" />
-                        <div class="match-score-badge">94% Match</div>
-                    </div>
+                <!-- DYNAMIC REPEATER FOR FREELANCERS FROM DATABASE -->
+                <asp:Repeater ID="rptMatchResults" runat="server" OnItemCommand="rptMatchResults_ItemCommand">
+                    <ItemTemplate>
+                        <div class="match-card">
+                            <div class="match-avatar-col">
+                                <img src='<%# GetAvatarUrl(Container.ItemIndex) %>' class="match-avatar-img" alt='<%# Eval("FullName") %>' />
+                                <div class="match-score-badge"><%# Eval("MatchScore") %>% Match</div>
+                            </div>
 
-                    <div class="match-info-col">
-                        <div>
-                            <span class="badge badge-gold" style="margin-bottom: 6px;">Best Skill Match</span>
-                            <h3 style="font-size: 20px; color: #2B1A12; margin-bottom: 4px;">Aarav Mehta</h3>
-                            <p style="font-size: 14px; color: #5A321F; font-weight: 600; margin-bottom: 8px;">ASP.NET &amp; C# Senior Developer</p>
-                            
-                            <div class="skill-tags">
-                                <span class="skill-tag">ASP.NET</span>
-                                <span class="skill-tag">C#</span>
-                                <span class="skill-tag">SQL Server</span>
-                                <span class="skill-tag">Web Forms</span>
+                            <div class="match-info-col">
+                                <div>
+                                    <span class="badge badge-gold" style="margin-bottom: 6px;">ID: FL-00<%# Eval("UserID") %></span>
+                                    <h3 style="font-size: 20px; color: #2B1A12; margin-bottom: 4px;"><%# Eval("FullName") %></h3>
+                                    <p style="font-size: 14px; color: #5A321F; font-weight: 600; margin-bottom: 8px;"><%# Eval("ServiceTitle") %></p>
+                                    
+                                    <div class="skill-tags">
+                                        <span class="skill-tag"><%# Eval("CategoryName") %></span>
+                                        <span class="skill-tag"><%# Eval("Location") %></span>
+                                        <span class="skill-tag"><%# Eval("ExperienceYears") %> Yrs Exp</span>
+                                    </div>
+                                </div>
+
+                                <!-- Identification & Match Details -->
+                                <div class="match-why-box">
+                                    <div style="font-size: 12px; font-weight: 700; color: #2B1A12; margin-bottom: 4px;">Identification &amp; Match Profile</div>
+                                    <div class="match-why-item"><span class="check-mark">[x]</span> Freelancer ID: <strong>FL-00<%# Eval("UserID") %></strong></div>
+                                    <div class="match-why-item"><span class="check-mark">[x]</span> Registered Email: <strong><%# Eval("Email") %></strong></div>
+                                    <div class="match-why-item"><span class="check-mark">[x]</span> Location: <%# Eval("Location") %> (Status: <%# Eval("Status") %>)</div>
+                                </div>
+                            </div>
+
+                            <div class="match-action-col">
+                                <div>
+                                    <div class="match-price">&#8377;<%# String.Format("{0:N0}", Eval("Price")) %></div>
+                                    <div style="font-size: 12px; color: #7A685D;">Est. Delivery: <%# Eval("DeliveryDays") %> Days</div>
+                                    <div style="font-size: 13px; color: #C99A5B; font-weight: 600; margin-top: 4px;">Rating: 4.9 / 5.0</div>
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                                    <asp:Button ID="btnSelectFreelancer" runat="server" Text="Select &amp; Hire" CommandName="HireFreelancer" CommandArgument='<%# Eval("UserID") + "|" + Eval("ServiceID") + "|" + Eval("Price") + "|" + Eval("FullName") %>' CssClass="btn-primary" style="padding: 9px; font-size: 13px;" />
+                                    <a href="Compare.aspx" class="btn-secondary" style="padding: 8px; font-size: 13px; text-align: center;">Compare Candidate</a>
+                                </div>
                             </div>
                         </div>
-
-                        <!-- Why This Match -->
-                        <div class="match-why-box">
-                            <div style="font-size: 12px; font-weight: 700; color: #2B1A12; margin-bottom: 4px;">Why This Match?</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Strong skill match (ASP.NET, C#, SQL Server)</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Fits your budget (&#8377;8,000 within &#8377;5k-15k)</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Meets experience requirement (3 Years)</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Same location &amp; work mode (Mumbai / Remote)</div>
-                        </div>
-                    </div>
-
-                    <div class="match-action-col">
-                        <div>
-                            <div class="match-price">&#8377;8,000</div>
-                            <div style="font-size: 12px; color: #7A685D;">Est. Delivery: 7 Days</div>
-                            <div style="font-size: 13px; color: #C99A5B; font-weight: 600; margin-top: 4px;">Rating: 4.9 / 5.0</div>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                            <button type="button" class="btn-primary" style="padding: 9px; font-size: 13px;" onclick="openProfileModal('Aarav Mehta', 'ASP.NET & C# Senior Developer', '3+ Years', 'Rs 8,000', '4.9 / 5.0', 'ASP.NET, C#, SQL Server, Web Forms', 'Experienced Web Forms developer specializing in college and enterprise project architecture.', '../../images/freelancer1.jpg')">View Profile</button>
-                            <asp:HyperLink ID="hlComp1" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="btn-secondary" style="padding: 8px; font-size: 13px; text-align: center;">Compare</asp:HyperLink>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CARD 2 (87% Match) -->
-                <div class="match-card">
-                    <div class="match-avatar-col">
-                        <asp:Image ID="imgM2" runat="server" ImageUrl="~/images/freelancer2.jpg" CssClass="match-avatar-img" AlternateText="Riya Shah" />
-                        <div class="match-score-badge" style="background: #E8F0FE; color: #1A73E8; border-color: #D2E3FC;">87% Match</div>
-                    </div>
-
-                    <div class="match-info-col">
-                        <div>
-                            <span class="badge badge-brown" style="margin-bottom: 6px;">Best Budget Fit</span>
-                            <h3 style="font-size: 20px; color: #2B1A12; margin-bottom: 4px;">Riya Shah</h3>
-                            <p style="font-size: 14px; color: #5A321F; font-weight: 600; margin-bottom: 8px;">Senior UI/UX &amp; Web Designer</p>
-                            
-                            <div class="skill-tags">
-                                <span class="skill-tag">Figma</span>
-                                <span class="skill-tag">UI Design</span>
-                                <span class="skill-tag">HTML5/CSS3</span>
-                            </div>
-                        </div>
-
-                        <!-- Why This Match -->
-                        <div class="match-why-box">
-                            <div style="font-size: 12px; font-weight: 700; color: #2B1A12; margin-bottom: 4px;">Why This Match?</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Excellent budget fit (&#8377;5,000 lowest rate)</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Exceeds experience requirement (4 Years)</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Fast 5-day delivery commitment</div>
-                        </div>
-                    </div>
-
-                    <div class="match-action-col">
-                        <div>
-                            <div class="match-price">&#8377;5,000</div>
-                            <div style="font-size: 12px; color: #7A685D;">Est. Delivery: 5 Days</div>
-                            <div style="font-size: 13px; color: #C99A5B; font-weight: 600; margin-top: 4px;">Rating: 4.8 / 5.0</div>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                            <button type="button" class="btn-primary" style="padding: 9px; font-size: 13px;" onclick="openProfileModal('Riya Shah', 'Senior UI/UX Designer', '4+ Years', 'Rs 5,000', '4.8 / 5.0', 'Figma, UI Design, HTML5, CSS3', 'Passionate designer crafting modern, accessible web interfaces.', '../../images/freelancer2.jpg')">View Profile</button>
-                            <asp:HyperLink ID="hlComp2" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="btn-secondary" style="padding: 8px; font-size: 13px; text-align: center;">Compare</asp:HyperLink>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CARD 3 (82% Match) -->
-                <div class="match-card">
-                    <div class="match-avatar-col">
-                        <asp:Image ID="imgM3" runat="server" ImageUrl="~/images/freelancer3.jpg" CssClass="match-avatar-img" AlternateText="Vikram Malhotra" />
-                        <div class="match-score-badge" style="background: #FEF7E0; color: #B06000; border-color: #FCE8E6;">82% Match</div>
-                    </div>
-
-                    <div class="match-info-col">
-                        <div>
-                            <span class="badge badge-gold" style="margin-bottom: 6px;">Fastest Delivery</span>
-                            <h3 style="font-size: 20px; color: #2B1A12; margin-bottom: 4px;">Vikram Malhotra</h3>
-                            <p style="font-size: 14px; color: #5A321F; font-weight: 600; margin-bottom: 8px;">Full Stack Web Developer</p>
-                            
-                            <div class="skill-tags">
-                                <span class="skill-tag">Web Forms</span>
-                                <span class="skill-tag">C#</span>
-                                <span class="skill-tag">JavaScript</span>
-                            </div>
-                        </div>
-
-                        <!-- Why This Match -->
-                        <div class="match-why-box">
-                            <div style="font-size: 12px; font-weight: 700; color: #2B1A12; margin-bottom: 4px;">Why This Match?</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Superfast 3-day turnaround</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> High 5-year experience background</div>
-                        </div>
-                    </div>
-
-                    <div class="match-action-col">
-                        <div>
-                            <div class="match-price">&#8377;10,000</div>
-                            <div style="font-size: 12px; color: #7A685D;">Est. Delivery: 3 Days</div>
-                            <div style="font-size: 13px; color: #C99A5B; font-weight: 600; margin-top: 4px;">Rating: 4.7 / 5.0</div>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                            <button type="button" class="btn-primary" style="padding: 9px; font-size: 13px;" onclick="openProfileModal('Vikram Malhotra', 'Full Stack Web Developer', '5+ Years', 'Rs 10,000', '4.7 / 5.0', 'Web Forms, C#, JavaScript, SQL', 'Full stack engineer with rapid prototype delivery record.', '../../images/freelancer3.jpg')">View Profile</button>
-                            <asp:HyperLink ID="hlComp3" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="btn-secondary" style="padding: 8px; font-size: 13px; text-align: center;">Compare</asp:HyperLink>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CARD 4 (78% Match) -->
-                <div class="match-card">
-                    <div class="match-avatar-col">
-                        <asp:Image ID="imgM4" runat="server" ImageUrl="~/images/freelancer4.jpg" CssClass="match-avatar-img" AlternateText="Ananya Verma" />
-                        <div class="match-score-badge" style="background: #FCE8E6; color: #C5221F; border-color: #FAD2CF;">78% Match</div>
-                    </div>
-
-                    <div class="match-info-col">
-                        <div>
-                            <span class="badge badge-brown" style="margin-bottom: 6px;">Best Nearby Match</span>
-                            <h3 style="font-size: 20px; color: #2B1A12; margin-bottom: 4px;">Ananya Verma</h3>
-                            <p style="font-size: 14px; color: #5A321F; font-weight: 600; margin-bottom: 8px;">Graphic &amp; Front-End Designer</p>
-                            
-                            <div class="skill-tags">
-                                <span class="skill-tag">Photoshop</span>
-                                <span class="skill-tag">CSS3</span>
-                                <span class="skill-tag">Branding</span>
-                            </div>
-                        </div>
-
-                        <!-- Why This Match -->
-                        <div class="match-why-box">
-                            <div style="font-size: 12px; font-weight: 700; color: #2B1A12; margin-bottom: 4px;">Why This Match?</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Same city location (Mumbai)</div>
-                            <div class="match-why-item"><span class="check-mark">[x]</span> Affordable pricing (&#8377;6,500)</div>
-                        </div>
-                    </div>
-
-                    <div class="match-action-col">
-                        <div>
-                            <div class="match-price">&#8377;6,500</div>
-                            <div style="font-size: 12px; color: #7A685D;">Est. Delivery: 6 Days</div>
-                            <div style="font-size: 13px; color: #C99A5B; font-weight: 600; margin-top: 4px;">Rating: 4.9 / 5.0</div>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                            <button type="button" class="btn-primary" style="padding: 9px; font-size: 13px;" onclick="openProfileModal('Ananya Verma', 'Graphic & Front-End Designer', '2+ Years', 'Rs 6,500', '4.9 / 5.0', 'Photoshop, CSS3, Branding', 'Creative designer specializing in visual identity and web interfaces.', '../../images/freelancer4.jpg')">View Profile</button>
-                            <asp:HyperLink ID="hlComp4" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="btn-secondary" style="padding: 8px; font-size: 13px; text-align: center;">Compare</asp:HyperLink>
-                        </div>
-                    </div>
-                </div>
+                    </ItemTemplate>
+                </asp:Repeater>
 
             </div>
         </div>

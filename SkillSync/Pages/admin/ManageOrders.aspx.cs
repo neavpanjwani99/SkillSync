@@ -7,43 +7,37 @@ namespace SkillSync.Pages.admin
 {
     public partial class ManageOrders : System.Web.UI.Page
     {
-        // Page Load Event - Checks admin authentication and loads orders list
+        // Connection string aur SqlCommand Practical 12 style me declare kar rahe hain
+        SqlConnection cn = new SqlConnection(@"Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True");
+        SqlCommand co = new SqlCommand();
+
+        // Page Load Event: Database Connection open karenge aur Orders list bind karenge
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Security Check for Admin
-            if (Session["UserType"] != null && Session["UserType"].ToString() != "Admin")
-            {
-                Response.Redirect("../client/Login.aspx");
-                return;
-            }
+            cn.Open();
+            co.Connection = cn;
 
             if (!IsPostBack)
             {
-                // Load all marketplace orders from database
-                LoadOrdersList();
+                // Database se ORDERS list load kar rahe hain
+                LoadOrders();
             }
         }
 
-        // Helper method to fetch all orders joined with clients, freelancers & services using ADO.NET
-        private void LoadOrdersList()
+        // Database se ORDERS table fetch karke Repeater me bind karna (Practical 12 Style with SqlDataAdapter)
+        private void LoadOrders()
         {
-            try
-            {
-                // Step 1: SQL Join Query to get order details
-                string sqlQuery = @"SELECT o.OrderID, o.OrderDate, o.TotalAmount, o.Status, 
-                                           c.FullName AS ClientName, f.FullName AS FreelancerName, s.ServiceTitle 
-                                    FROM ORDERS o 
-                                    INNER JOIN USERS c ON o.ClientID = c.UserID 
-                                    INNER JOIN USERS f ON o.FreelancerID = f.UserID 
-                                    INNER JOIN SERVICES s ON o.ServiceID = s.ServiceID 
-                                    ORDER BY o.OrderID DESC";
+            SqlDataAdapter da = new SqlDataAdapter("select o.OrderID, o.OrderDate, o.TotalAmount, o.Status, c.FullName as ClientName, f.FullName as FreelancerName, s.ServiceTitle from ORDERS o left join USERS c on o.ClientID = c.UserID left join USERS f on o.FreelancerID = f.UserID left join SERVICES s on o.ServiceID = s.ServiceID order by o.OrderID desc", cn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
 
-                DataTable dtOrders = DbHelper.ExecuteQuery(sqlQuery);
-            }
-            catch (Exception ex)
-            {
-                // Smooth rendering
-            }
+            rptOrders.DataSource = dt;
+            rptOrders.DataBind();
+
+            co.CommandText = "select count(*) from ORDERS";
+            lblTotalOrders.Text = "Total Orders: " + co.ExecuteScalar().ToString();
         }
     }
 }
+
+

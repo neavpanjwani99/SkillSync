@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -8,60 +7,50 @@ namespace SkillSync.Pages.client
 {
     public partial class WebForm1 : System.Web.UI.Page
     {
-        // Page Load Event - Initializes category dropdown list from SQL database
+        // Connection string aur SqlCommand Practical 12 style me declare kar rahe hain
+        SqlConnection cn = new SqlConnection(@"Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True");
+        SqlCommand co = new SqlCommand();
+
+        // Page Load Event: Database Connection open karenge aur Categories Dropdown fill karenge
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Load categories only on first load, not on button clicks
+            cn.Open();
+            co.Connection = cn;
+
             if (!IsPostBack)
             {
+                // Page pehli baar load hone par categories load karenge
                 LoadCategories();
             }
         }
 
-        // Helper method to fetch categories from CATEGORIES table using ADO.NET
+        // Database se Categories table ka data padh kar Dropdown list me bind karna
         private void LoadCategories()
         {
-            try
-            {
-                // Step 1: Execute SQL query to get active categories
-                string sqlQuery = "SELECT CategoryID, CategoryName FROM CATEGORIES ORDER BY CategoryName ASC";
-                DataTable dtCategories = DbHelper.ExecuteQuery(sqlQuery);
+            // SQL SELECT Query run kar rahe hain
+            co.CommandText = "select CategoryID, CategoryName from CATEGORIES order by CategoryName asc";
+            SqlDataReader dr = co.ExecuteReader();
 
-                if (dtCategories.Rows.Count > 0)
-                {
-                    // Step 2: Bind data to ddlCategory control
-                    ddlCategory.DataSource = dtCategories;
-                    ddlCategory.DataTextField = "CategoryName";
-                    ddlCategory.DataValueField = "CategoryID";
-                    ddlCategory.DataBind();
-                }
+            ddlCategory.Items.Clear();
+            ddlCategory.Items.Add(new ListItem("All Categories", "All"));
 
-                // Add default top item
-                ddlCategory.Items.Insert(0, new ListItem("All Categories", "All"));
-            }
-            catch (Exception ex)
+            // SqlDataReader se har row read karke dropdown me add kar rahe hain
+            while (dr.Read())
             {
-                // Fallback items if database is initializing
-                if (ddlCategory.Items.Count == 0)
-                {
-                    ddlCategory.Items.Add(new ListItem("All Categories", "All"));
-                    ddlCategory.Items.Add(new ListItem("Web Development", "Web Development"));
-                    ddlCategory.Items.Add(new ListItem("Mobile App Development", "Mobile App Development"));
-                    ddlCategory.Items.Add(new ListItem("UI/UX Design", "UI/UX Design"));
-                    ddlCategory.Items.Add(new ListItem("Graphic Design", "Graphic Design"));
-                }
+                ddlCategory.Items.Add(new ListItem(dr["CategoryName"].ToString(), dr["CategoryID"].ToString()));
             }
+
+            dr.Close();
         }
 
-        // Find Freelancers Button Click Event
+        // Find Freelancers Button Click Event: QueryString se filters MatchResults page par bhejna
         protected void btnFind_Click(object sender, EventArgs e)
         {
-            // Step 1: Read category and requirement search input
-            string selectedCat = ddlCategory.SelectedItem != null ? ddlCategory.SelectedItem.Text : "All";
-            string reqText = txtRequirement.Text.Trim();
+            string category = ddlCategory.SelectedItem != null ? ddlCategory.SelectedItem.Text : "All";
+            string req = txtRequirement.Text;
 
-            // Step 2: Pass search criteria to MatchResults.aspx via QueryString
-            Response.Redirect($"MatchResults.aspx?cat={Server.UrlEncode(selectedCat)}&skills={Server.UrlEncode(reqText)}");
+            // MatchResults page par search parameters bhej rahe hain
+            Response.Redirect("MatchResults.aspx?cat=" + Server.UrlEncode(category) + "&skills=" + Server.UrlEncode(req));
         }
     }
 }

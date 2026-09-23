@@ -29,6 +29,7 @@
                 <asp:HyperLink ID="MatchLink" runat="server" NavigateUrl="~/Pages/client/MatchResults.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Match Results</asp:HyperLink>
                 <asp:HyperLink ID="CompareLink" runat="server" NavigateUrl="~/Pages/client/Compare.aspx" CssClass="nav-link" style="display: inline-block; margin-right: 20px; font-weight: 600; color: #4A2C1D;">Compare</asp:HyperLink>
                 <asp:HyperLink ID="LoginLink" runat="server" NavigateUrl="~/Pages/client/Login.aspx" CssClass="btn-primary" style="display: inline-block; padding: 10px 24px; background-color: #5A321F; color: #FFFAF3 !important; border-radius: 8px; font-weight: 600;">Login</asp:HyperLink>
+                <asp:HyperLink ID="LogoutLink" runat="server" NavigateUrl="~/Pages/client/Login.aspx" Visible="false" CssClass="btn-primary" style="display: inline-block; padding: 10px 24px; background-color: #C2392A; color: #FFFAF3 !important; border-radius: 8px; font-weight: 600;">Logout</asp:HyperLink>
             </nav>
 
             <div style="clear: both;"></div>

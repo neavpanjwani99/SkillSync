@@ -8,12 +8,22 @@ namespace SkillSync.Pages.client
 {
     public partial class MatchResults : System.Web.UI.Page
     {
-        // Page Load Event - Reads QueryString filters and updates UI summary labels
+        // Connection string aur SqlCommand Practical 12 style me declare kar rahe hain
+        SqlConnection cn = new SqlConnection(@"Data Source=NEAV;Initial Catalog=SkillSync;Integrated Security=True;TrustServerCertificate=True");
+        SqlCommand co = new SqlCommand();
+
+        // Page Load Event: Database Connection open karenge aur URL se filters padhenge
         protected void Page_Load(object sender, EventArgs e)
         {
+            cn.Open();
+            co.Connection = cn;
+
             if (!IsPostBack)
             {
-                // Step 1: Read search criteria from URL parameters
+                // Freelancer identification dropdown fill karenge
+                LoadSelectFreelancerDropdown();
+
+                // URL Parameters (QueryString) se search values read kar rahe hain
                 string cat = Request.QueryString["cat"];
                 string skills = Request.QueryString["skills"];
                 string min = Request.QueryString["min"];
@@ -22,77 +32,146 @@ namespace SkillSync.Pages.client
                 string loc = Request.QueryString["loc"];
                 string mode = Request.QueryString["mode"];
 
-                // Update summary bar badges
-                if (!string.IsNullOrEmpty(cat))
+                // UI Summary Badges update kar rahe hain
+                if (cat != null && cat != "")
                 {
                     lblSummaryCat.Text = GetCategoryDisplayName(cat);
                     SetDropdownValue(ddlFiltCat, cat);
                 }
 
-                if (!string.IsNullOrEmpty(skills))
+                if (skills != null && skills != "")
                 {
                     lblSummarySkills.Text = skills;
                 }
 
-                if (!string.IsNullOrEmpty(min) || !string.IsNullOrEmpty(max))
+                if ((min != null && min != "") || (max != null && max != ""))
                 {
-                    string minStr = string.IsNullOrEmpty(min) ? "0" : min;
-                    string maxStr = string.IsNullOrEmpty(max) ? "20,000" : max;
-                    lblSummaryBudget.Text = $"Rs {minStr} - Rs {maxStr}";
+                    string minStr = (min == null || min == "") ? "0" : min;
+                    string maxStr = (max == null || max == "") ? "20,000" : max;
+                    lblSummaryBudget.Text = "Rs " + minStr + " - Rs " + maxStr;
                 }
 
-                if (!string.IsNullOrEmpty(exp))
+                if (exp != null && exp != "")
                 {
                     lblSummaryExp.Text = exp == "1Yr" ? "1+ Years" : (exp == "2Yrs" ? "2+ Years" : (exp == "3Yrs" ? "3+ Years" : "Any Experience"));
                 }
 
-                if (!string.IsNullOrEmpty(loc) || !string.IsNullOrEmpty(mode))
+                if ((loc != null && loc != "") || (mode != null && mode != ""))
                 {
-                    string locStr = string.IsNullOrEmpty(loc) ? "Mumbai" : loc;
-                    string modeStr = string.IsNullOrEmpty(mode) ? "Remote" : mode;
-                    lblSummaryLoc.Text = $"{locStr} ({modeStr})";
+                    string locStr = (loc == null || loc == "") ? "Mumbai" : loc;
+                    string modeStr = (mode == null || mode == "") ? "Remote" : mode;
+                    lblSummaryLoc.Text = locStr + " (" + modeStr + ")";
                 }
 
-                // Step 2: Fetch matched freelancers from database using ADO.NET
-                FetchMatchedServicesFromDatabase(cat);
+                // Database se matched services aur freelancers fetch karke display karenge
+                LoadServicesData();
             }
         }
 
-        // Helper method to execute ADO.NET query to get matching services
-        private void FetchMatchedServicesFromDatabase(string category)
+        // Database se Freelancer Users fetch karke DropDown me identification ke sath display karna
+        private void LoadSelectFreelancerDropdown()
         {
-            try
-            {
-                using (SqlConnection con = DbHelper.GetConnection())
-                {
-                    string query = @"SELECT s.ServiceID, s.ServiceTitle, s.Price, s.DeliveryDays, s.ExperienceYears, u.FullName, u.Location 
-                                    FROM SERVICES s 
-                                    INNER JOIN USERS u ON s.FreelancerID = u.UserID 
-                                    WHERE s.Status = 'Active'";
+            co.CommandText = "select UserID, FullName, Email from USERS where UserType='Freelancer' order by UserID asc";
+            SqlDataReader dr = co.ExecuteReader();
 
-                    using (SqlCommand cmd = new SqlCommand(query, con))
-                    {
-                        DataTable dt = new DataTable();
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
+            ddlSelectFreelancerID.Items.Clear();
+            ddlSelectFreelancerID.Items.Add(new ListItem("-- Select Freelancer by Identification --", "0"));
+
+            while (dr.Read())
             {
-                // Smooth fallback if DB is initializing
+                string id = dr["UserID"].ToString();
+                string name = dr["FullName"].ToString();
+                string email = dr["Email"].ToString();
+                ddlSelectFreelancerID.Items.Add(new ListItem("ID: FL-00" + id + " - " + name + " (" + email + ")", id));
             }
+
+            dr.Close();
         }
 
-        // Sidebar Apply Filter Button Click Event
+        // Database se SERVICES aur FREELANCERS data fetch karke Repeater me bind karna (Practical 12 SqlDataAdapter Style)
+        private void LoadServicesData()
+        {
+            string whereClause = " where u.UserType='Freelancer' and s.Status='Active'";
+
+            // Agar dropdown se particular Freelancer ID selected hai
+            if (ddlSelectFreelancerID.SelectedValue != null && ddlSelectFreelancerID.SelectedValue != "0")
+            {
+                whereClause += " and u.UserID=" + ddlSelectFreelancerID.SelectedValue;
+            }
+            else if (ddlFiltCat.SelectedValue != null && ddlFiltCat.SelectedValue != "All" && ddlFiltCat.SelectedValue != "")
+            {
+                whereClause += " and c.CategoryName='" + ddlFiltCat.SelectedValue + "'";
+            }
+
+            string sql = "select u.UserID, u.FullName, u.Email, u.Location, u.Status, s.ServiceID, s.ServiceTitle, s.Description, s.Price, s.DeliveryDays, s.ExperienceYears, c.CategoryName from USERS u inner join SERVICES s on u.UserID = s.FreelancerID inner join CATEGORIES c on s.CategoryID = c.CategoryID" + whereClause + " order by u.UserID asc";
+
+            SqlDataAdapter da = new SqlDataAdapter(sql, cn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            dt.Columns.Add("MatchScore", typeof(int));
+            int baseScore = 94;
+            foreach (DataRow dr in dt.Rows)
+            {
+                dr["MatchScore"] = baseScore;
+                baseScore -= 6;
+                if (baseScore < 76) baseScore = 88;
+            }
+
+            rptMatchResults.DataSource = dt;
+            rptMatchResults.DataBind();
+        }
+
+        // Dropdown Index Change Event: Specific Freelancer select karne par table filter karna
+        protected void ddlSelectFreelancerID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            pnlHireSuccess.Visible = false;
+            LoadServicesData();
+        }
+
+        // Apply Filter Button Event
         protected void btnApplyFilter_Click(object sender, EventArgs e)
         {
+            pnlHireSuccess.Visible = false;
             lblSummaryCat.Text = ddlFiltCat.SelectedItem.Text;
             lblSummaryBudget.Text = ddlFiltBudget.SelectedItem.Text;
             lblSummaryExp.Text = ddlFiltExp.SelectedItem.Text;
-            lblSummaryLoc.Text = $"Mumbai ({ddlFiltMode.SelectedItem.Text})";
+            lblSummaryLoc.Text = "Mumbai (" + ddlFiltMode.SelectedItem.Text + ")";
+            LoadServicesData();
+        }
+
+        // Repeater Row Command Event: User client side se specific Freelancer select & hire karke ORDER place kar sakta hai
+        protected void rptMatchResults_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "HireFreelancer")
+            {
+                string[] parts = e.CommandArgument.ToString().Split('|');
+                string freelancerId = parts[0];
+                string serviceId = parts[1];
+                string price = parts[2];
+                string freelancerName = parts[3];
+
+                // Client ID 3 (Rohit Sharma) ke liye database me Order Insert query execute karenge
+                string sql = "insert into ORDERS (OrderID, ClientID, FreelancerID, ServiceID, OrderDate, TotalAmount, Status) values ((select isnull(max(OrderID), 0) + 1 from ORDERS), 3, " + freelancerId + ", " + serviceId + ", GETDATE(), " + price + ", 'Pending')";
+
+                co.CommandText = sql;
+                co.ExecuteNonQuery();
+
+                lblHireMsg.Text = "Successfully selected & hired Freelancer ID: FL-00" + freelancerId + " (" + freelancerName + ")! Order placed for Rs " + price + ".";
+                pnlHireSuccess.Visible = true;
+            }
+        }
+
+        // Avatar images generator helper
+        public string GetAvatarUrl(int index)
+        {
+            string[] avatars = new string[] {
+                "../../images/freelancer1.jpg",
+                "../../images/freelancer2.jpg",
+                "../../images/freelancer3.jpg",
+                "../../images/freelancer4.jpg"
+            };
+            return avatars[index % avatars.Length];
         }
 
         private string GetCategoryDisplayName(string val)

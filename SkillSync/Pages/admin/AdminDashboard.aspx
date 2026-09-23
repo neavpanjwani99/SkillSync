@@ -1,4 +1,5 @@
-<%@ Page Title="Admin Dashboard | SkillSync" Language="C#" MasterPageFile="admin-side.Master" AutoEventWireup="true" CodeBehind="AdminDashboard.aspx.cs" Inherits="SkillSync.Pages.admin.AdminDashboard" %><asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<%@ Page Title="Admin Dashboard | SkillSync" Language="C#" MasterPageFile="admin-side.Master" AutoEventWireup="true" CodeBehind="AdminDashboard.aspx.cs" Inherits="SkillSync.Pages.admin.AdminDashboard" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
         .dash-header {
             margin-bottom: 28px;
@@ -119,7 +120,8 @@
             font-weight: 700;
         }
     </style>
-</asp:Content><asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- HEADER -->
     <div class="dash-header">
         <h1 class="dash-title">Admin Dashboard</h1>
@@ -130,26 +132,26 @@
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-label">Total Users</div>
-            <div class="stat-value">1,248</div>
-            <span style="font-size: 12px; color: #137333;">+12% this month</span>
+            <div class="stat-value"><asp:Label ID="lblTotalUsers" runat="server" Text="0" /></div>
+            <span style="font-size: 12px; color: #137333;">Registered System Accounts</span>
         </div>
 
         <div class="stat-card" style="border-left-color: #5A321F;">
             <div class="stat-label">Total Freelancers</div>
-            <div class="stat-value">386</div>
-            <span style="font-size: 12px; color: #137333;">+8% this month</span>
+            <div class="stat-value"><asp:Label ID="lblTotalFreelancers" runat="server" Text="0" /></div>
+            <span style="font-size: 12px; color: #137333;">Active Freelancers</span>
         </div>
 
         <div class="stat-card" style="border-left-color: #4A2C1D;">
             <div class="stat-label">Total Services</div>
-            <div class="stat-value">24</div>
-            <span style="font-size: 12px; color: #7A685D;">Active Categories</span>
+            <div class="stat-value"><asp:Label ID="lblTotalServices" runat="server" Text="0" /></div>
+            <span style="font-size: 12px; color: #7A685D;">Listed Services</span>
         </div>
 
         <div class="stat-card" style="border-left-color: #137333;">
             <div class="stat-label">Total Orders</div>
-            <div class="stat-value">572</div>
-            <span style="font-size: 12px; color: #137333;">94% Completion Rate</span>
+            <div class="stat-value"><asp:Label ID="lblTotalOrders" runat="server" Text="0" /></div>
+            <span style="font-size: 12px; color: #137333;">Marketplace Orders</span>
         </div>
     </div>
 
@@ -160,116 +162,83 @@
         <div>
             <!-- Top Services Table -->
             <div class="panel-card">
-                <div class="panel-title">Top Performing Services</div>
-                <table class="admin-table">
-                    <thead>
+                <div class="panel-title">Active Service Categories</div>
+                <asp:Repeater ID="rptTopCategories" runat="server">
+                    <HeaderTemplate>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Category Name</th>
+                                    <th>Active Services</th>
+                                    <th>Avg. Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    </HeaderTemplate>
+                    <ItemTemplate>
                         <tr>
-                            <th>Service Category</th>
-                            <th>Active Orders</th>
-                            <th>Avg. Price</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Web Development</strong></td>
-                            <td>214 Orders</td>
-                            <td>&#8377;8,500</td>
+                            <td><strong><%# Eval("CategoryName") %></strong></td>
+                            <td><%# Eval("ServiceCount") %> Services</td>
+                            <td>&#8377;<%# String.Format("{0:N0}", Eval("AvgPrice")) %></td>
                             <td><span class="status-badge-sm badge-completed">Active</span></td>
                         </tr>
-                        <tr>
-                            <td><strong>UI/UX Design</strong></td>
-                            <td>168 Orders</td>
-                            <td>&#8377;5,200</td>
-                            <td><span class="status-badge-sm badge-completed">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Graphic Design</strong></td>
-                            <td>94 Orders</td>
-                            <td>&#8377;4,000</td>
-                            <td><span class="status-badge-sm badge-completed">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Digital Marketing</strong></td>
-                            <td>62 Orders</td>
-                            <td>&#8377;6,000</td>
-                            <td><span class="status-badge-sm badge-completed">Active</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                    </ItemTemplate>
+                    <FooterTemplate>
+                            </tbody>
+                        </table>
+                    </FooterTemplate>
+                </asp:Repeater>
             </div>
 
             <!-- Order Overview Breakdown -->
             <div class="panel-card">
-                <div class="panel-title">Order Status Overview</div>
+                <div class="panel-title">Order Status Breakdown</div>
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center;">
                     <div style="background: #FFF4E5; padding: 16px; border-radius: 10px; border: 1px solid #FFE0B2;">
-                        <div style="font-size: 20px; font-weight: 800; color: #B06000;">14</div>
+                        <div style="font-size: 20px; font-weight: 800; color: #B06000;"><asp:Label ID="lblPendingOrders" runat="server" Text="0" /></div>
                         <div style="font-size: 12px; color: #7A685D; font-weight: 600;">Pending</div>
                     </div>
                     <div style="background: #E8F0FE; padding: 16px; border-radius: 10px; border: 1px solid #D2E3FC;">
-                        <div style="font-size: 20px; font-weight: 800; color: #1A73E8;">42</div>
+                        <div style="font-size: 20px; font-weight: 800; color: #1A73E8;"><asp:Label ID="lblInProgressOrders" runat="server" Text="0" /></div>
                         <div style="font-size: 12px; color: #7A685D; font-weight: 600;">In Progress</div>
                     </div>
                     <div style="background: #E6F4EA; padding: 16px; border-radius: 10px; border: 1px solid #CEEAD6;">
-                        <div style="font-size: 20px; font-weight: 800; color: #137333;">504</div>
+                        <div style="font-size: 20px; font-weight: 800; color: #137333;"><asp:Label ID="lblCompletedOrders" runat="server" Text="0" /></div>
                         <div style="font-size: 12px; color: #7A685D; font-weight: 600;">Completed</div>
                     </div>
                     <div style="background: #FCE8E6; padding: 16px; border-radius: 10px; border: 1px solid #FAD2CF;">
-                        <div style="font-size: 20px; font-weight: 800; color: #C5221F;">12</div>
+                        <div style="font-size: 20px; font-weight: 800; color: #C5221F;"><asp:Label ID="lblCancelledOrders" runat="server" Text="0" /></div>
                         <div style="font-size: 12px; color: #7A685D; font-weight: 600;">Cancelled</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: RECENT ACTIVITY FEED -->
+        <!-- RIGHT COLUMN: RECENT USERS ACTIVITY FEED -->
         <div>
             <div class="panel-card">
-                <div class="panel-title">Recent Activity Log</div>
-                <ul class="activity-list">
-                    <li class="activity-item">
-                        <div>
-                            <strong>New Freelancer Registered</strong><br />
-                            <span style="color: #7A685D;">Aarav Mehta (Mumbai)</span>
-                        </div>
-                        <span style="font-size: 11px; color: #A9907E;">10m ago</span>
-                    </li>
-
-                    <li class="activity-item">
-                        <div>
-                            <strong>Order ORD001 Completed</strong><br />
-                            <span style="color: #7A685D;">Client Neha Shah</span>
-                        </div>
-                        <span style="font-size: 11px; color: #A9907E;">1h ago</span>
-                    </li>
-
-                    <li class="activity-item">
-                        <div>
-                            <strong>New Service Listing</strong><br />
-                            <span style="color: #7A685D;">ASP.NET Web Development</span>
-                        </div>
-                        <span style="font-size: 11px; color: #A9907E;">3h ago</span>
-                    </li>
-
-                    <li class="activity-item">
-                        <div>
-                            <strong>New Client Registered</strong><br />
-                            <span style="color: #7A685D;">Riya Shah (Pune)</span>
-                        </div>
-                        <span style="font-size: 11px; color: #A9907E;">5h ago</span>
-                    </li>
-
-                    <li class="activity-item">
-                        <div>
-                            <strong>Match Engine Calculation</strong><br />
-                            <span style="color: #7A685D;">94% Match Generated</span>
-                        </div>
-                        <span style="font-size: 11px; color: #A9907E;">1d ago</span>
-                    </li>
-                </ul>
+                <div class="panel-title">Recent System Activity</div>
+                <asp:Repeater ID="rptRecentActivity" runat="server">
+                    <HeaderTemplate>
+                        <ul class="activity-list">
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <li class="activity-item">
+                            <div>
+                                <strong><%# Eval("FullName") %></strong> (<%# Eval("UserType") %>)<br />
+                                <span style="color: #7A685D;"><%# Eval("Email") %> &bull; <%# Eval("Location") %></span>
+                            </div>
+                            <span style="font-size: 11px; color: #A9907E;"><%# String.Format("{0:dd MMM}", Eval("CreatedDate")) %></span>
+                        </li>
+                    </ItemTemplate>
+                    <FooterTemplate>
+                        </ul>
+                    </FooterTemplate>
+                </asp:Repeater>
             </div>
         </div>
 
     </div>
 </asp:Content>
+
